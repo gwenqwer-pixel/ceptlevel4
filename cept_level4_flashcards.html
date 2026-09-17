@@ -2,498 +2,867 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEPT 4級單字複習</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CEPT 4級單字</title>
     <style>
-      :root {
-        --primary: #4f46e5;
-        --primary-light: #e0e7ff;
-        --primary-dark: #3730a3;
-      }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      }
-      .flip-card {
-        perspective: 1000px;
-      }
-      .flip-card-inner {
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-      }
-      .flip-card.flipped .flip-card-inner {
-        transform: rotateY(180deg);
-      }
-      .flip-card-front, .flip-card-back {
-        backface-visibility: hidden;
-      }
-      .flip-card-back {
-        transform: rotateY(180deg);
-      }
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --primary-dark: #4338ca;
+            --card-border: #e2e8f0;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --tag-bg: #e0e7ff;
+            --tag-text: #4338ca;
+            --star-gold: #eab308;
+            --shadow-card: 0 4px 15px -1px rgba(0, 0, 0, 0.05), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Top Header Bar */
+        .header-bar {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .brand-badge {
+            background: #ede9fe;
+            color: #5b21b6;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .header-btn {
+            background: white;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 8px 4px;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            transition: all 0.15s ease;
+        }
+        .header-btn:active {
+            transform: scale(0.96);
+            background: #f1f5f9;
+        }
+
+        /* Category Filter Tabs */
+        .category-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .tab-btn {
+            padding: 8px 4px;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            background: white;
+            color: var(--text-sub);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+        }
+
+        /* Search & Dropdown Bar */
+        .search-bar-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-box-wrapper {
+            flex: 1.4;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 30px;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            background: white;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .alpha-select {
+            flex: 1;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            background: white;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .star-filter-btn {
+            background: white;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .star-filter-btn.active {
+            background: #fef9c3;
+            border-color: #fde047;
+            color: #854d0e;
+        }
+
+        /* Status & Tool Row */
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4px;
+            font-size: 0.85rem;
+        }
+
+        .status-tags {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .counter-pill {
+            background: #e2e8f0;
+            color: #334155;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .level-pill {
+            background: #38bdf8;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .word-id-pill {
+            color: var(--text-sub);
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .card-tools {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .star-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            transition: color 0.15s ease;
+        }
+        .star-toggle.active {
+            color: var(--star-gold);
+        }
+
+        .auto-speak-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            cursor: pointer;
+        }
+
+        /* Flashcard Area */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            min-height: 290px;
+            width: 100%;
+        }
+
+        .flashcard {
+            width: 100%;
+            min-height: 290px;
+            background: var(--bg-card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow-card);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px 20px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.4s ease, border-color 0.2s;
+        }
+        .flashcard:hover {
+            border-color: #cbd5e1;
+        }
+
+        .card-word {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .speaker-btn {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--primary);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-phonetic {
+            font-size: 0.95rem;
+            color: #0284c7;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .card-definition {
+            font-size: 1.05rem;
+            color: #475569;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        /* Back details */
+        .card-back-content {
+            display: none;
+            width: 100%;
+            text-align: left;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 10px;
+        }
+
+        .flashcard.flipped .card-back-content {
+            display: block;
+        }
+
+        .example-sentence {
+            font-size: 0.95rem;
+            color: #1e293b;
+            line-height: 1.45;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .example-trans {
+            font-size: 0.85rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* Bottom Control Action Bar */
+        .action-bar {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-prev, .btn-next {
+            background: white;
+            border: 1px solid var(--card-border);
+            color: #334155;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .btn-flip {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.28);
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Overview List Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 16px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-body {
+            background: white;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 20px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            font-weight: 700;
+        }
+
+        .modal-list {
+            padding: 8px 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .list-item {
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        .list-item:hover {
+            background: #f8fafc;
+        }
+        .list-item-id {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.8rem;
+            width: 45px;
+        }
+        .list-item-word {
+            font-weight: 700;
+            color: #0f172a;
+            flex: 1;
+        }
+        .list-item-def {
+            color: var(--text-sub);
+            font-size: 0.85rem;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- Header / Navbar -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
-            <div class="flex items-center space-x-2">
-                <span class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">CEPT</span>
-                <h1 class="text-lg font-bold text-slate-900">4級單字複習</h1>
-            </div>
-            
-            <!-- Stats & Controls -->
-            <div class="flex items-center space-x-3 text-xs sm:text-sm text-slate-600">
-                <span id="counter" class="bg-slate-100 px-2.5 py-1 rounded-md font-medium">1 / 100</span>
-                <div class="flex items-center space-x-1">
-                    <button onclick="changeSpeed(0.5)" id="speed-0.5" class="px-2 py-1 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 transition">0.5x</button>
-                    <button onclick="changeSpeed(1.0)" id="speed-1.0" class="px-2 py-1 rounded bg-indigo-600 text-white font-medium">1.0x</button>
-                    <button onclick="changeSpeed(1.5)" id="speed-1.5" class="px-2 py-1 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 transition">1.5x</button>
-                </div>
-            </div>
+<div class="app-container">
+    <!-- Top Header Bar -->
+    <div class="header-bar">
+        <div class="brand-badge">
+            <span>🎯</span> CEPT 4級單字
         </div>
-    </header>
+        <button class="header-btn" onclick="openOverviewModal()">
+            📋 總覽
+        </button>
+        <button class="header-btn" onclick="shuffleCards()">
+            🎲 隨機
+        </button>
+        <button class="header-btn" onclick="togglePlaybackSpeed()" id="speed-indicator">
+            ⚡ 1.0x
+        </button>
+    </div>
 
-    <!-- Filter Bar -->
-    <div class="max-w-4xl mx-auto px-4 pt-4 w-full">
-        <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-wrap gap-2 items-center justify-between">
-            <div class="flex flex-wrap gap-1.5" id="level-filters">
-                <button onclick="filterLevel('all')" id="filter-all" class="px-3 py-1 text-xs font-semibold rounded-lg bg-indigo-600 text-white transition">全部</button>
-                <button onclick="filterLevel('A')" id="filter-A" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">A 開頭</button>
-                <button onclick="filterLevel('B')" id="filter-B" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">B 開頭</button>
-                <button onclick="filterLevel('C')" id="filter-C" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">C 開頭</button>
-                <button onclick="filterLevel('D')" id="filter-D" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">D 開頭</button>
-                <button onclick="filterLevel('P')" id="filter-P" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">P 開頭</button>
-                <button onclick="filterLevel('S')" id="filter-S" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">S 開頭</button>
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+        <button class="tab-btn active" id="tab-all" onclick="setCategory('all')">全部 (<span id="count-all">0</span>)</button>
+        <button class="tab-btn" id="tab-basic" onclick="setCategory('basic')">基礎 (<span id="count-basic">0</span>)</button>
+        <button class="tab-btn" id="tab-medium" onclick="setCategory('medium')">中級 (<span id="count-medium">0</span>)</button>
+        <button class="tab-btn" id="tab-adv" onclick="setCategory('adv')">高級 (<span id="count-adv">0</span>)</button>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="search-bar-row">
+        <div class="search-box-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="搜尋單字、中文..." oninput="handleSearch()">
+        </div>
+        <select class="alpha-select" id="alpha-select" onchange="handleAlphaFilter()">
+            <option value="all">全部 (A-Z)</option>
+            <option value="A">A 開頭</option>
+            <option value="B">B 開頭</option>
+            <option value="C">C 開頭</option>
+            <option value="D">D 開頭</option>
+            <option value="E">E 開頭</option>
+            <option value="F">F 開頭</option>
+            <option value="G">G 開頭</option>
+            <option value="H">H 開頭</option>
+            <option value="I">I 開頭</option>
+            <option value="P">P 開頭</option>
+            <option value="R">R 開頭</option>
+            <option value="S">S 開頭</option>
+            <option value="T">T 開頭</option>
+            <option value="W">W 開頭</option>
+        </select>
+        <button class="star-filter-btn" id="star-filter-btn" onclick="toggleStarredFilter()">
+            ⭐ <span id="star-counter">0</span>
+        </button>
+    </div>
+
+    <!-- Status Information Row -->
+    <div class="status-row">
+        <div class="status-tags">
+            <span class="counter-pill" id="counter-pill">1 / 100</span>
+            <span class="level-pill" id="level-pill">四級</span>
+            <span class="word-id-pill" id="word-id-pill">A01</span>
+        </div>
+        <div class="card-tools">
+            <span class="star-toggle" id="card-star-btn" onclick="toggleCurrentStar()">★</span>
+            <label class="auto-speak-label">
+                <input type="checkbox" id="auto-speak-check" checked>
+                翻轉朗讀
+            </label>
+        </div>
+    </div>
+
+    <!-- Card Container -->
+    <div class="flashcard-wrapper" onclick="handleCardClick()">
+        <div class="flashcard" id="flashcard">
+            <div class="card-phonetic" id="card-pos">(adj.)</div>
+            <div class="card-word">
+                <span id="card-word-text">able</span>
+                <button class="speaker-btn" onclick="speakCurrent(event)" title="語音朗讀">🔊</button>
             </div>
-            <div class="w-full sm:w-auto flex items-center space-x-2">
-                <input type="text" id="search-input" oninput="searchWords()" placeholder="搜尋單字、中文..." class="w-full sm:w-44 px-3 py-1 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <button onclick="toggleStarredFilter()" id="starred-filter-btn" class="px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-white hover:bg-amber-50 text-slate-600 transition flex items-center space-x-1">
-                    <span>⭐</span> <span id="starred-count">0</span>
-                </button>
+            <div class="card-definition" id="card-def">有能力的</div>
+
+            <!-- Back Detailed Example -->
+            <div class="card-back-content" id="card-back-content">
+                <div class="example-sentence" id="example-eng">He was not able to pay his bills.</div>
+                <div class="example-trans" id="example-chn">他繳不起賬單。</div>
             </div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow flex flex-col justify-center">
-        
-        <!-- Flashcard Container -->
-        <div id="flashcard" class="flip-card w-full max-w-xl mx-auto h-80 sm:h-96 cursor-pointer select-none" onclick="flipCard()">
-            <div class="flip-card-inner relative w-full h-full text-center rounded-2xl shadow-md bg-white border border-slate-100">
-                
-                <!-- Card Front -->
-                <div class="flip-card-front absolute w-full h-full p-6 flex flex-col justify-between rounded-2xl bg-white overflow-y-auto">
-                    <div class="flex justify-between items-center w-full">
-                        <span id="card-id" class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2.5 py-1 rounded-full">A01</span>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="event.stopPropagation(); speakWord()" class="p-2 text-slate-400 hover:text-indigo-600 rounded-full hover:bg-slate-50 transition" title="朗讀發音">
-                                🔊
-                            </button>
-                            <button onclick="event.stopPropagation(); toggleStar()" id="star-btn" class="text-slate-300 hover:text-amber-400 text-lg transition">
-                                ⭐
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="my-auto">
-                        <h2 id="card-word" class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">able</h2>
-                        <p id="card-pos" class="text-xs sm:text-sm font-medium text-indigo-600 mt-2 bg-indigo-50/60 inline-block px-3 py-1 rounded-full">(adj.) 有能力的</p>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex justify-center items-center space-x-1">
-                        <span>點擊卡片翻面看例句</span>
-                        <span class="animate-bounce">👆</span>
-                    </div>
-                </div>
-
-                <!-- Card Back -->
-                <div class="flip-card-back absolute w-full h-full p-6 flex flex-col justify-between rounded-2xl bg-slate-900 text-white text-left overflow-y-auto">
-                    <div class="flex justify-between items-center w-full">
-                        <span class="text-xs font-bold text-indigo-300 bg-indigo-950 px-2.5 py-1 rounded-full">例句解析</span>
-                        <button onclick="event.stopPropagation(); toggleStar()" id="star-btn-back" class="text-slate-500 hover:text-amber-400 text-lg transition">
-                            ⭐
-                        </button>
-                    </div>
-                    
-                    <div class="my-auto space-y-3">
-                        <div>
-                            <p id="card-eng" class="text-sm sm:text-base font-semibold text-indigo-200">He was not able to pay his bills.</p>
-                            <p id="card-chn" class="text-xs sm:text-sm text-slate-300 mt-1">他繳不起賬單。</p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 text-center">
-                        點擊卡片返回單字
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Navigation Controls -->
-        <div class="flex justify-between items-center max-w-xl mx-auto w-full mt-6">
-            <button onclick="prevCard()" class="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 active:scale-95 transition shadow-sm flex items-center space-x-1">
-                <span>← 上一個</span>
-            </button>
-            <div class="flex items-center space-x-2">
-                <button onclick="openOverviewModal()" class="px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition shadow-sm" title="單字列表">
-                    📋 總覽
-                </button>
-                <button onclick="randomCard()" class="px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition shadow-sm" title="隨機抽考">
-                    🎲 隨機
-                </button>
-            </div>
-            <button onclick="nextCard()" class="px-4 py-2.5 bg-indigo-600 rounded-xl text-sm font-semibold text-white hover:bg-indigo-700 active:scale-95 transition shadow-sm shadow-indigo-200 flex items-center space-x-1">
-                <span>下一個 →</span>
-            </button>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="text-center py-4 text-xs text-slate-400">
-        CEPT 4級單字複習小工具
-    </footer>
-
-    <!-- Overview Modal -->
-    <div id="overview-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-xl overflow-hidden">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center">
-                <h3 class="font-bold text-slate-900">單字總覽列表</h3>
-                <button onclick="closeOverviewModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold px-2">✕</button>
-            </div>
-            <div class="p-4 overflow-y-auto divide-y divide-slate-100 flex-grow" id="word-list-container">
-                <!-- Populated by JS -->
-            </div>
-        </div>
+    <!-- Bottom Action Navigation Bar -->
+    <div class="action-bar">
+        <button class="action-btn btn-prev" onclick="prevCard()">
+            ▲ 上一個
+        </button>
+        <button class="action-btn btn-flip" onclick="flipCardOnly()">
+            🔄 翻轉卡片
+        </button>
+        <button class="action-btn btn-next" onclick="nextCard()">
+            ▼ 下一個
+        </button>
     </div>
+</div>
 
-    <!-- JavaScript Application Logic -->
-    <script>
-        // CEPT 4級單字資料庫 (依據上傳文本整理精選)
-        const wordsData = [
-            { id: "A01", word: "able", pos: "(adj.)", definition: "有能力的", eng: "He was not able to pay his bills.", chn: "他繳不起賬單。" },
-            { id: "A01-2", word: "ability", pos: "(n.)", definition: "能力,才能", eng: "He has the ability to type 100 English words per minute.", chn: "他能夠每分鐘打100個英文字。" },
-            { id: "A02", word: "abroad", pos: "(adv.)", definition: "在(到)國外", eng: "We plan to travel abroad this summer.", chn: "我們計畫在今年夏天到國外旅行。" },
-            { id: "A03", word: "accept", pos: "(v.)", definition: "接受", eng: "This gift is too expensive; I cannot accept it.", chn: "這禮物太貴了,我不能接受。" },
-            { id: "A04", word: "according to", pos: "(prep.)", definition: "依照,根據", eng: "According to the weather report, it is going to rain tomorrow.", chn: "依照氣象報告,明天會下雨。" },
-            { id: "A05", word: "across", pos: "(prep./adv.)", definition: "橫過,穿過", eng: "It is very dangerous to swim across the river.", chn: "游泳過河很危險。" },
-            { id: "A06", word: "act", pos: "(v./n.)", definition: "行動,扮演,行為", eng: "The little girl acts like a mother.", chn: "這小女孩假裝得像母親一樣。" },
-            { id: "A06-2", word: "action", pos: "(n.)", definition: "動作,行動", eng: "We must take action before it is too late.", chn: "在為時已晚之前,我們必須採取行動。" },
-            { id: "A07", word: "actor", pos: "(n.)", definition: "男演員", eng: "His father is a famous actor.", chn: "他的父親是個很有名的演員。" },
-            { id: "A08", word: "add", pos: "(v.)", definition: "加,增加", eng: "He added one more spoon of sugar.", chn: "他多加了一湯匙的糖。" },
-            { id: "A09", word: "address", pos: "(n./v.)", definition: "地址,演說", eng: "Please write down your address on this paper.", chn: "請把你的地址寫在這張紙上。" },
-            { id: "A10", word: "adult", pos: "(n.)", definition: "成人,大人", eng: "This movie is for adults only.", chn: "這部電影只給成年人看的。" },
-            { id: "A11", word: "afraid", pos: "(adj.)", definition: "害怕的,擔憂的", eng: "Jennifer is afraid of snakes and mice.", chn: "珍妮佛怕蛇和老鼠。" },
-            { id: "A12", word: "afternoon", pos: "(n.)", definition: "下午", eng: "He told us he would arrive tomorrow afternoon.", chn: "他告訴我們他將在明天下午抵達。" },
-            { id: "A13", word: "again", pos: "(adv.)", definition: "再一次", eng: "Could you say that again, please?", chn: "可以請你再說一次嗎?" },
-            { id: "A15", word: "age", pos: "(n.)", definition: "年齡,時代", eng: "You look much younger than your age.", chn: "你看起來比實際年齡年輕許多。" },
-            { id: "A16", word: "ago", pos: "(adv.)", definition: "以前", eng: "I saw Tom in the park a few days ago.", chn: "幾天前我在公園有看到湯姆。" },
-            { id: "A17", word: "agree", pos: "(v.)", definition: "同意", eng: "We agree that smoking is harmful to health.", chn: "我們都贊同吸煙是有害健康的。" },
-            { id: "A18", word: "ahead", pos: "(adv.)", definition: "在前的,向前", eng: "I arrived at the party ahead of her.", chn: "我在她之前到達舞會。" },
-            { id: "A20", word: "air", pos: "(n.)", definition: "空氣,天空", eng: "We cannot live without air.", chn: "沒有空氣,我們就無法存活。" },
-            { id: "A22", word: "airplane", pos: "(n.)", definition: "飛機", eng: "It is expensive to go to Taipei by airplane.", chn: "搭飛機到台北很貴。" },
-            { id: "A24", word: "alarm", pos: "(n./v.)", definition: "鬧鐘,警報器", eng: "You'd better set an alarm.", chn: "你最好設鬧鐘。" },
-            { id: "A26", word: "alive", pos: "(adj.)", definition: "活着的,有活力的", eng: "Although Tom is seventy, he is still very alive.", chn: "雖然湯姆70歲了,他仍然非常有活力。" },
-            { id: "A27", word: "allow", pos: "(v.)", definition: "允許", eng: "No food and drinks are allowed aboard.", chn: "車上飲食是不被允許的。" },
-            { id: "A29", word: "almost", pos: "(adv.)", definition: "幾乎", eng: "The town was almost destroyed during the war.", chn: "這個小鎮在戰爭期間幾乎毀了。" },
-            { id: "A30", word: "alone", pos: "(adj./adv.)", definition: "獨自的", eng: "For years, Jack lived alone in New York.", chn: "傑克獨自地在紐約生活了好幾年。" },
-            { id: "A31", word: "along", pos: "(prep.)", definition: "沿著", eng: "I was walking along the street.", chn: "我正沿著街道走著。" },
-            { id: "A32", word: "already", pos: "(adv.)", definition: "已經", eng: "I've already done my work today.", chn: "我已經將今天的工作完成了。" },
-            { id: "A33", word: "although", pos: "(conj.)", definition: "雖然", eng: "Although she is only three, she can speak English.", chn: "她雖然只有三歲,但會說英文。" },
-            { id: "A34", word: "always", pos: "(adv.)", definition: "總是", eng: "We have always done the job in this way.", chn: "我們總是以這個方式做事。" },
-            { id: "A37", word: "angry", pos: "(adj.)", definition: "生氣的", eng: "She was angry with me.", chn: "她在生我的氣。" },
-            { id: "A38", word: "animal", pos: "(n.)", definition: "動物", eng: "Snakes, fish, and birds are all animals.", chn: "蛇、魚和鳥都是動物。" },
-            { id: "A40", word: "answer", pos: "(n./v.)", definition: "答案,回答", eng: "The teacher wants students to answer the question.", chn: "老師要學生回答問題。" },
-            { id: "A43", word: "anything", pos: "(n.)", definition: "任何東西", eng: "If there is anything I can do, let me know.", chn: "如果有我可以效勞的，請讓我知道。" },
-            { id: "A44", word: "apartment", pos: "(n.)", definition: "公寓", eng: "The new employee is looking for an apartment.", chn: "新雇員正在尋找公寓。" },
-            { id: "B03", word: "bad", pos: "(adj.)", definition: "壞的,不好的", eng: "I had a bad headache last night.", chn: "我昨晚頭痛得厲害。" },
-            { id: "B05", word: "bag", pos: "(n.)", definition: "袋子", eng: "I always bring a shopping bag.", chn: "我總是帶購物袋。" },
-            { id: "B06", word: "bakery", pos: "(n.)", definition: "麵包店", eng: "The bakery offers fresh bread at 3 p.m.", chn: "麵包店下午三點供應新鮮麵包。" },
-            { id: "B08", word: "ball", pos: "(n.)", definition: "球,舞會", eng: "Most dogs like to play with a ball.", chn: "大部分的狗都喜歡玩球。" },
-            { id: "B11", word: "bank", pos: "(n.)", definition: "銀行,岸", eng: "I went to the bank and took some money out.", chn: "我去銀行領了一些錢。" },
-            { id: "B14", word: "baseball", pos: "(n.)", definition: "棒球", eng: "Baseball is popular in Taiwan and the US.", chn: "棒球在台灣和美國很受歡迎。" },
-            { id: "B17", word: "basketball", pos: "(n.)", definition: "籃球", eng: "Michael Jordan is a great basketball player.", chn: "麥可喬登是一位偉大的籃球員。" },
-            { id: "B19", word: "bathroom", pos: "(n.)", definition: "浴室", eng: "The boy is brushing his teeth in the bathroom.", chn: "小男孩正在浴室裡刷牙。" },
-            { id: "B21", word: "beach", pos: "(n.)", definition: "海灘", eng: "There are many nice beaches in Taiwan.", chn: "台灣有許多美麗的海灘。" },
-            { id: "B24", word: "beautiful", pos: "(adj.)", definition: "美麗的", eng: "These pictures show all my beautiful memories.", chn: "這些照片顯示我過去美好的回憶。" },
-            { id: "B25", word: "because", pos: "(conj.)", definition: "因為", eng: "Because he drove too fast, he had an accident.", chn: "因為車開太快，他發生了意外。" },
-            { id: "B26", word: "become", pos: "(v.)", definition: "變得,成為", eng: "Ice cream becomes popular in hot weather.", chn: "冰淇淋在熱天變得非常受歡迎。" },
-            { id: "B27", word: "bed", pos: "(n.)", definition: "床", eng: "He has to stay in bed all day.", chn: "他必須整天躺在床上。" },
-            { id: "B32", word: "begin", pos: "(v.)", definition: "開始", eng: "He began his own career last summer.", chn: "他去年夏天開始了自己的事業。" },
-            { id: "B34", word: "believe", pos: "(v.)", definition: "相信", eng: "Believe it or not, I am very hungry.", chn: "信不信由你，我很餓。" },
-            { id: "B42", word: "big", pos: "(adj.)", definition: "大的", eng: "The man has the biggest car on our street.", chn: "那個人擁有街上最大的車。" },
-            { id: "B44", word: "birthday", pos: "(n.)", definition: "生日", eng: "My birthday is April Fool's Day.", chn: "我的生日是愚人節。" },
-            { id: "B46", word: "black", pos: "(n./adj.)", definition: "黑色(的)", eng: "I like to wear black clothes in winter.", chn: "我冬天喜歡穿黑色衣服。" },
-            { id: "B51", word: "blow", pos: "(v.)", definition: "吹,風吹", eng: "The strong wind blew my hat off.", chn: "強風把我的帽子吹走了。" },
-            { id: "B52", word: "blue", pos: "(n./adj.)", definition: "藍色(的)", eng: "Blue stands for sorrow to some people.", chn: "有些人認為藍色代表悲傷。" },
-            { id: "B56", word: "book", pos: "(n./v.)", definition: "書本,預定", eng: "Open your book to page 10, please.", chn: "請把書翻到第十頁。" },
-            { id: "B59", word: "borrow", pos: "(v.)", definition: "借入", eng: "I borrowed these books from the library.", chn: "我從圖書館借了這些書。" },
-            { id: "B60", word: "boss", pos: "(n.)", definition: "老闆", chn: "Now I am a boss of 50 employees.", eng: "我現在是五十位員工的老闆。" },
-            { id: "B66", word: "brave", pos: "(adj.)", definition: "勇敢的", eng: "The boy was very brave to save his friend.", chn: "這男孩很勇敢地去救朋友。" },
-            { id: "B67", word: "bread", pos: "(n.)", definition: "麵包", eng: "Kids usually have bread and milk for breakfast.", chn: "小孩通常吃麵包和牛奶當早餐。" },
-            { id: "B68", word: "break", pos: "(v./n.)", definition: "打破,休息", eng: "I broke the chocolate to share with friends.", chn: "我把巧克力分給朋友。" },
-            { id: "B73", word: "bring", pos: "(v.)", definition: "帶來", eng: "Bring an umbrella; it may rain this afternoon.", chn: "帶把傘，下午可能會下雨。" },
-            { id: "B74", word: "brother", pos: "(n.)", definition: "兄弟", eng: "I have a twin brother.", chn: "我有個雙胞胎兄弟。" },
-            { id: "B78", word: "build", pos: "(v.)", definition: "建造", eng: "The house was built one hundred years ago.", chn: "這房子是一百年前建造的。" },
-            { id: "B82", word: "busy", pos: "(adj.)", definition: "忙碌的", eng: "I am busy now; can I talk to you later?", chn: "我現在很忙，待會談好嗎？" },
-            { id: "B83", word: "business", pos: "(n.)", definition: "生意,行業", eng: "What business are you in?", chn: "你從事什麼行業？" },
-            { id: "B86", word: "buy", pos: "(v.)", definition: "買", eng: "I bought my mother a gift.", chn: "我買了一個禮物給媽媽。" },
-            { id: "C02", word: "cake", pos: "(n.)", definition: "蛋糕", chn: "I like cake, which is my favorite dessert.", eng: "我很喜歡蛋糕，它是我最喜愛的甜點。" },
-            { id: "C04", word: "call", pos: "(v./n.)", definition: "打電話,喊叫", chn: "May I use your telephone to make a call?", eng: "我可以用電話打個通話嗎？" },
-            { id: "C07", word: "camera", pos: "(n.)", definition: "照相機", chn: "A good photographer knows when to click.", eng: "好的攝影師知道何時按快門。" },
-            { id: "C12", word: "car", pos: "(n.)", definition: "汽車", chn: "He got into a red car and drove away.", eng: "他坐進紅車開走了。" },
-            { id: "C14", word: "careful", pos: "(adj.)", definition: "仔細的,小心地", chn: "Be careful when you cross the road.", eng: "過馬路時要小心。" },
-            { id: "C16", word: "carry", pos: "(v.)", definition: "攜帶,搬運", chn: "The bus can carry fifty passengers.", eng: "這輛巴士可載五十名乘客。" },
-            { id: "C20", word: "cat", pos: "(n.)", definition: "貓", chn: "Our cat is good at catching mice.", eng: "我們的貓很會捉老鼠。" },
-            { id: "C21", word: "catch", pos: "(v.)", definition: "捕捉,趕上", chn: "He ran fast to catch the bus.", eng: "他跑得很快去趕公車。" },
-            { id: "C26", word: "center", pos: "(n.)", definition: "中心", chn: "There are tall buildings in the center of town.", eng: "市中心有許多高樓。" },
-            { id: "C33", word: "cheap", pos: "(adj.)", definition: "便宜的", chn: "Jenny bought the book at a cheap price.", eng: "珍妮以低廉價格買了這本書。" },
-            { id: "C39", word: "chicken", pos: "(n.)", definition: "雞,雞肉", chn: "Fried chicken is delicious.", eng: "炸雞很美味。" },
-            { id: "C41", word: "child", pos: "(n.)", definition: "小孩 (複數 children)", chn: "He behaves like a child.", eng: "他的行為像個孩子。" },
-            { id: "C50", word: "city", pos: "(n.)", definition: "城市", chn: "I prefer city life to country life.", eng: "我喜歡都市生活甚於鄉村。" },
-            { id: "C53", word: "clean", pos: "(adj./v.)", definition: "乾淨的,打掃", chn: "The kitchen was clean.", eng: "廚房是乾淨的。" },
-            { id: "C59", word: "close", pos: "(v./adj.)", definition: "關閉,接近", chn: "Please close the door.", eng: "請把門關上。" },
-            { id: "D04", word: "dark", pos: "(adj.)", definition: "黑暗的", chn: "It is getting dark. Let's turn on the light.", eng: "天晚了，把燈打開吧！" },
-            { id: "D06", word: "date", pos: "(n.)", definition: "日期,約會", chn: "Please write down your date of birth.", eng: "請寫下您的出生日期。" },
-            { id: "D08", word: "day", pos: "(n.)", definition: "天,日子", chn: "A: What day is today? B: It's Friday.", eng: "A:今天星期幾？ B:星期五。" },
-            { id: "D11", word: "decide", pos: "(v.)", definition: "決定", chn: "We have not decided which one to buy.", eng: "我們還沒決定買哪一個。" },
-            { id: "D15", word: "delicious", pos: "(adj.)", definition: "美味的", chn: "The food looks and tastes delicious.", eng: "這食物看起來和嚐起來都很美味。" },
-            { id: "D23", word: "dictionary", pos: "(n.)", definition: "字典", chn: "Look up the new word in a dictionary.", eng: "在字典裡查這個新單字。" },
-            { id: "D24", word: "die", pos: "(v.)", definition: "死亡", chn: "Her father died in a car accident.", eng: "她父親在車禍中過世。" },
-            { id: "D26", word: "difficult", pos: "(adj.)", definition: "困難的", chn: "It is difficult to learn a new language.", eng: "學習新語言是困難的。" },
-            { id: "D28", word: "dinner", pos: "(n.)", definition: "晚餐", chn: "What are we going to eat for dinner?", eng: "我們晚餐要吃什麼？" },
-            { id: "P01", word: "pack", pos: "(v./n.)", definition: "打包,包裹", chn: "She packed a small suitcase for the trip.", eng: "她為旅行打包了小行李箱。" },
-            { id: "P02", word: "page", pos: "(n.)", definition: "頁", chn: "Please open your book to page 20.", eng: "請把書本翻到20頁。" },
-            { id: "P04", word: "paint", pos: "(n./v.)", definition: "油漆,畫畫", chn: "He painted the door a bright color.", eng: "他把門漆成了明亮的顏色。" },
-            { id: "P12", word: "park", pos: "(n./v.)", definition: "公園,停車", chn: "Peter likes jogging in the park.", eng: "彼得喜歡在公園慢跑。" },
-            { id: "P14", word: "party", pos: "(n.)", definition: "派對,政黨", chn: "Sue invited me to her birthday party.", eng: "蘇邀請我去她的生日派對。" },
-            { id: "P21", word: "pen", pos: "(n.)", definition: "原子筆", chn: "If you write in pen, you cannot erase it.", eng: "用原子筆寫字就無法擦掉。" },
-            { id: "P32", word: "picture", pos: "(n.)", definition: "圖片,照片", chn: "There are two birds in the picture.", eng: "圖畫裡有兩隻鳥。" },
-            { id: "P40", word: "pizza", pos: "(n.)", definition: "披薩", chn: "Today I have a pizza for lunch.", eng: "我今天午餐吃披薩。" },
-            { id: "P44", word: "play", pos: "(v./n.)", definition: "玩,演奏,戲劇", chn: "He can teach me how to play guitar.", eng: "他可以教我彈吉他。" },
-            { id: "P51", word: "police", pos: "(n.)", definition: "警察", chn: "The police caught the criminal.", eng: "警察抓到了罪犯。" },
-            { id: "S01", word: "sad", pos: "(adj.)", definition: "悲傷的", chn: "I am sad to hear of his death.", eng: "聽到他的死訊我很悲傷。" },
-            { id: "S02", word: "safe", pos: "(adj.)", definition: "安全的", chn: "She told her mother that she was safe.", eng: "她跟媽媽說她是安全的。" },
-            { id: "S15", word: "school", pos: "(n.)", definition: "學校", chn: "She left school at seventeen.", eng: "她十七歲時離開學校。" },
-            { id: "S20", word: "sea", pos: "(n.)", definition: "海", chn: "I live by the sea and like to swim.", eng: "我住在海邊且喜歡游泳。" },
-            { id: "S31", word: "sell", pos: "(v.)", definition: "賣", chn: "They sell vegetables in the market.",  eng: "他們在市場賣菜。" },
-            { id: "S38", word: "set", pos: "(v./n.)", definition: "放置,一套", chn: "He set his hat on the table.", eng: "他把帽子放在桌上。" },
-            { id: "S44", word: "sharp", pos: "(adj.)", definition: "銳利的,準時的", chn: "Let's meet at 10 o'clock sharp.", eng: "我們十點整見面。" },
-            { id: "S52", word: "shoe", pos: "(n.)", definition: "鞋子", chn: "I tried on a pair of shoes, but they didn't fit.", eng: "我試穿了一雙鞋，但不合腳。" },
-            { id: "S63", word: "sick", pos: "(adj.)", definition: "生病的", chn: "She was absent because she was sick.", eng: "她缺席是因為生病了。" },
-            { id: "S71", word: "sing", pos: "(v.)", definition: "唱歌", chn: "She sang her baby to sleep.", eng: "她唱歌哄寶寶入睡。" }
-        ];
+<!-- Overview Modal -->
+<div class="modal-overlay" id="overview-modal" onclick="closeOverviewModal(event)">
+    <div class="modal-body" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <span>單字總覽列表</span>
+            <button onclick="closeOverviewModal()" style="border:none;background:none;font-size:1.2rem;cursor:pointer;">✕</button>
+        </div>
+        <div class="modal-list" id="modal-list"></div>
+    </div>
+</div>
 
-        let currentIndex = 0;
-        let currentFilteredList = [...wordsData];
-        let currentSpeed = 1.0;
-        let activeFilter = 'all';
-        let isStarredOnly = false;
-        let starredIds = JSON.parse(localStorage.getItem('cept4_starred') || '[]');
+<script>
+    // CEPT 4級題庫
+    const rawVocabulary = [
+        { id: "A01", word: "able", pos: "(adj.)", def: "有能力的", eng: "He was not able to pay his bills.", chn: "他繳不起賬單。", group: "basic" },
+        { id: "A01-2", word: "ability", pos: "(n.)", def: "能力, 才能", eng: "He has the ability to type 100 English words per minute.", chn: "他能夠每分鐘打100個英文字。", group: "medium" },
+        { id: "A02", word: "abroad", pos: "(adv.)", def: "在(到)國外", eng: "We plan to travel abroad this summer.", chn: "我們計畫在今年夏天到國外旅行。", group: "basic" },
+        { id: "A03", word: "accept", pos: "(v.)", def: "接受", eng: "This gift is too expensive; I cannot accept it.", chn: "這禮物太貴了, 我不能接受。", group: "basic" },
+        { id: "A03-2", word: "acceptable", pos: "(adj.)", def: "可接受的", eng: "Your work is not acceptable. Please do it again.", chn: "你的工作是不可以接受的, 請重做。", group: "adv" },
+        { id: "A04", word: "according to", pos: "(prep.)", def: "依照, 和諧的", eng: "According to the weather report, it is going to rain tomorrow.", chn: "依照氣象報告, 明天會下雨。", group: "basic" },
+        { id: "A05", word: "across", pos: "(prep./adv.)", def: "橫過, 穿過", eng: "It is very dangerous to swim across the river.", chn: "游泳過河很危險, 因為水太深了。", group: "basic" },
+        { id: "A06", word: "act", pos: "(v./n.)", def: "假裝, 行為", eng: "The little girl acts like a mother.", chn: "這小女孩假裝得像母親一樣。", group: "basic" },
+        { id: "A06-2", word: "action", pos: "(n.)", def: "動作, 行為", eng: "We must take action before it is too late.", chn: "在為時已晚之前, 我們必須採取行動。", group: "medium" },
+        { id: "A07", word: "actor", pos: "(n.)", def: "男演員", eng: "His father is a famous actor.", chn: "他的父親是個很有名的演員。", group: "basic" },
+        { id: "A08", word: "add", pos: "(v.)", def: "加, 增加", eng: "He added one more spoon of sugar to make the cake sweeter.", chn: "他多加了一湯匙的糖, 使蛋糕嚐起來更甜一點。", group: "basic" },
+        { id: "A09", word: "address", pos: "(n./v.)", def: "地址, 稱呼, 演說", eng: "Please write down your address on this paper.", chn: "請把你的地址寫在這張紙上。", group: "medium" },
+        { id: "A10", word: "adult", pos: "(n.)", def: "成人, 大人", eng: "This movie is for adults only, not for children.", chn: "這部電影只給成年人看的, 不是小孩看的。", group: "basic" },
+        { id: "A11", word: "afraid", pos: "(adj.)", def: "害怕的, 恐怕的", eng: "Jennifer is afraid of snakes and mice.", chn: "珍妮佛怕蛇和老鼠。", group: "basic" },
+        { id: "A14", word: "against", pos: "(prep.)", def: "對抗, 違反, 靠", eng: "We will fight against the enemy.", chn: "我們將與敵人對抗。", group: "medium" },
+        { id: "A15", word: "age", pos: "(n.)", def: "年齡, 時代", eng: "You look much younger than your age.", chn: "你看起來比實際年齡年輕許多。", group: "basic" },
+        { id: "A17", word: "agree", pos: "(v.)", def: "同意", eng: "We agree that smoking is harmful to our health.", chn: "我們都贊同吸煙是有害健康的。", group: "basic" },
+        { id: "A18", word: "ahead", pos: "(adv.)", def: "在前的", eng: "Although I left home later, I arrived ahead of her.", chn: "雖然我比珍晚出門，我卻在她之前到達。", group: "medium" },
+        { id: "A24", word: "alarm", pos: "(n./v.)", def: "鬧鐘, 警報器, 警告", eng: "You'd better set an alarm or have someone wake you up.", chn: "你最好設鬧鐘或找人叫醒你。", group: "medium" },
+        { id: "A26", word: "alive", pos: "(adj.)", def: "活著的, 有活力的", eng: "Although Tom is seventy years old, he is still very alive.", chn: "雖然約翰70歲了, 他仍然非常有活力。", group: "medium" },
+        { id: "A27", word: "allow", pos: "(v.)", def: "允許", eng: "No food and drinks are allowed aboard the MRT.", chn: "在捷運上飲食是不被允許的。", group: "basic" },
+        { id: "B01", word: "baby-sit", pos: "(v.)", def: "當臨時保姆", eng: "I baby-sit in my neighborhood to make some money.", chn: "我在附近地區當臨時保姆來賺一點錢。", group: "medium" },
+        { id: "B03", word: "badly", pos: "(adv.)", def: "壞, 拙劣地, 罪惡地", eng: "I think he behaved very badly.", chn: "我認為他行為表現得很壞。", group: "adv" },
+        { id: "B06", word: "bakery", pos: "(n.)", def: "麵包店", eng: "The bakery around the corner offers fresh bread at 3 p.m.", chn: "每天下午三點, 街角的那間麵包店供應新鮮的麵包。", group: "basic" },
+        { id: "B14", word: "baseball", pos: "(n.)", def: "棒球", eng: "The Yankees is one of the most popular professional baseball teams.", chn: "洋基隊是美國最受歡迎的職業棒球隊之一。", group: "basic" },
+        { id: "B15", word: "basic", pos: "(adj.)", def: "基本的", eng: "He has basic ability of English.", chn: "他有基礎的英文能力。", group: "medium" },
+        { id: "B20", word: "battle", pos: "(n./v.)", def: "戰鬥, 奮鬥", eng: "The shortage of food caused a battle between two lions.", chn: "食物短缺引起兩隻獅子之間的戰鬥。", group: "adv" },
+        { id: "B22", word: "bear", pos: "(v.)", def: "承受, 忍受", eng: "Will the ice on the lake bear your weight?", chn: "湖面上的冰層可以承受你的重量嗎?", group: "medium" },
+        { id: "B34", word: "believe", pos: "(v.)", def: "相信", eng: "Believe it or not, I can eat up a whole chicken.", chn: "信不信由你, 我餓到可以吃掉整隻雞。", group: "basic" },
+        { id: "B40", word: "besides", pos: "(adv./prep.)", def: "此外, 除...之外", eng: "It is out of our price range; besides, it is too big.", chn: "這超出預算，除此以外也太大了。", group: "medium" },
+        { id: "B66", word: "brave", pos: "(adj.)", def: "勇敢的", eng: "The boy jumped into the pool to save his friend.", chn: "這個男孩很勇敢, 跳進游泳池去救朋友。", group: "basic" },
+        { id: "B71", word: "brief", pos: "(adj./v.)", def: "簡短的, 簡報", eng: "The speech is too long. Please make it brief.", chn: "這個演講太長了, 請簡短。", group: "adv" },
+        { id: "C05", word: "calm", pos: "(adj./n.)", def: "寧靜的, 心平氣和的", eng: "He has a very calm manner.", chn: "他舉止沉著鎮靜。", group: "medium" },
+        { id: "C14", word: "careless", pos: "(adj.)", def: "隨便的, 粗心的", eng: "She is careless about her clothes.", chn: "她對穿著一點都不講究。", group: "medium" },
+        { id: "C22", word: "cause", pos: "(n./v.)", def: "原因, 導致", eng: "Smoking is the main cause of lung cancer.", chn: "抽菸是肺癌的主要原因。", group: "medium" },
+        { id: "C28", word: "certainly", pos: "(adv.)", def: "確定地", eng: "Health is certainly far more important than money.", chn: "健康確定是遠比金錢還重要。", group: "adv" },
+        { id: "C32", word: "changeable", pos: "(adj.)", def: "易變的, 不定的", eng: "His temper has been changeable this week.", chn: "這星期他脾氣變化無常。", group: "adv" },
+        { id: "C34", word: "cheat", pos: "(v.)", def: "欺騙, 作弊", eng: "The student was caught cheating in the exam.", chn: "那學生考試作弊被逮到了。", group: "basic" },
+        { id: "C40", word: "chief", pos: "(n./adj.)", def: "首領, 主要的", eng: "Cars are the chief reason for the city's pollution.", chn: "汽車是造成這城市汙染的主要原因。", group: "adv" },
+        { id: "C72", word: "comfortable", pos: "(adj.)", def: "舒服的, 自在的", eng: "The room in this hotel is large and comfortable.", chn: "這旅館的房間既寬敞又舒適。", group: "basic" },
+        { id: "C78", word: "control", pos: "(v.)", def: "控制, 操縱", eng: "The teacher could not control them.", chn: "老師並無法控制住他們。", group: "medium" },
+        { id: "C79", word: "convenient", pos: "(adj.)", def: "方便的", eng: "It is not convenient for me to give you a ride today.", chn: "今天不方便讓你搭便車。", group: "medium" },
+        { id: "D11", word: "decision", pos: "(n.)", def: "決定", eng: "I try not to make the wrong decision.", chn: "我試著不要做出錯誤的決定。", group: "medium" },
+        { id: "D16", word: "independent", pos: "(adj.)", def: "獨立的", eng: "Although he is twenty years old, he can't be independent.", chn: "雖然他已經20歲了, 但還是無法獨立。", group: "adv" },
+        { id: "D25", word: "difference", pos: "(n.)", def: "差別", eng: "There is a big difference in quality between these two.", chn: "這兩個產品的品質有很大的差異。", group: "medium" },
+        { id: "D26", word: "difficulty", pos: "(n.)", def: "困難", eng: "My friend has great difficulty finding a job.", chn: "我朋友在找工作上遭遇很大的困難。", group: "medium" },
+        { id: "D30", word: "discover", pos: "(v.)", def: "發現, 發覺", eng: "Columbus discovered America in 1492.", chn: "在1492年當時, 哥倫布發現美洲大陸。", group: "medium" },
+        { id: "D31", word: "discuss", pos: "(v.)", def: "討論", eng: "They are discussing where they can have a picnic.", chn: "他們正在討論野餐的地點。", group: "basic" },
+        { id: "P03", word: "painful", pos: "(adj.)", def: "痛苦的, 疼痛的", eng: "Jack's back is so painful that he cannot stand upright.", chn: "傑克的背疼痛不已, 連站都站不直。", group: "adv" },
+        { id: "P18", word: "peaceful", pos: "(adj.)", def: "和平的, 平靜的", eng: "All I want is to have a peaceful and quiet time.", chn: "我想要安詳寧靜的時刻渡過下午。", group: "medium" },
+        { id: "P52", word: "polite", pos: "(adj.)", def: "有禮貌的", eng: "Children are taught to be polite to others.", chn: "小孩子被教導要對人有禮貌。", group: "basic" },
+        { id: "P68", word: "prepare", pos: "(v.)", def: "準備", eng: "He didn’t have enough time to prepare for the exam.", chn: "他沒有足夠的時間好好準備考試。", group: "basic" },
+        { id: "P77", word: "progress", pos: "(n./v.)", def: "進步, 發展", eng: "Your Spanish really progressed!", chn: "你的西班牙語真的進步很多。", group: "medium" },
+        { id: "P78", word: "prove", pos: "(v.)", def: "證明, 證實", eng: "The fingerprints proved that she was the murderer.", chn: "指紋證明她就是謀殺犯。", group: "adv" },
+        { id: "S02", word: "safety", pos: "(n.)", def: "安全, 平安", eng: "The teacher led children to a place of safety.", chn: "老師帶領孩子們到安全的地方。", group: "medium" },
+        { id: "S30", word: "selfish", pos: "(adj.)", def: "自私的", eng: "My friend is not a selfish girl. Instead, she is generous.", chn: "我朋友不是自私自利的女孩，她很大方。", group: "medium" },
+        { id: "S69", word: "simple", pos: "(adj.)", def: "簡單的, 單純的", eng: "It is a simple task and will take you little time.", chn: "它是一項很簡單的任務，不會花費太多力氣。", group: "basic" },
+        { id: "S75", word: "skillful", pos: "(adj.)", def: "有技術的, 熟練的", eng: "I am skillful enough to control the machine now.", chn: "我現在有足夠的技能來控制這台機器。", group: "adv" },
+        { id: "S153", word: "successful", pos: "(adj.)", def: "成功的", eng: "My first attempt was not successful.", chn: "我首次想要破他紀錄但並未成功。", group: "medium" },
+        { id: "T17", word: "teenager", pos: "(n.)", def: "青少年", eng: "Teenagers have more freedom today than in the past.", chn: "現今的青少年比過去享有更多自由。", group: "basic" },
+        { id: "T22", word: "terrible", pos: "(adj.)", def: "可怕的, 嚴重的", eng: "A terrible accident happened on the highway last night.", chn: "昨晚高速公路上發生了一場可怕的意外。", group: "medium" },
+        { id: "T77", word: "trouble", pos: "(n./v.)", def: "麻煩, 煩惱", eng: "If I don’t get home by ten, I’ll be in trouble.", chn: "如果十點前沒抵達家門，我就麻煩大了。", group: "basic" },
+        { id: "W11", word: "wasteful", pos: "(adj.)", def: "浪費的, 揮霍的", eng: "It is wasteful that you throw so much food away!", chn: "你把那麼多食物扔掉，太浪費了！", group: "adv" },
+        { id: "W17", word: "wealthy", pos: "(adj.)", def: "富有的", eng: "Bill Gates is a wealthy international businessman.", chn: "比爾蓋茲是一個富有的跨國企業家。", group: "adv" }
+    ];
 
-        // Initialization
-        document.addEventListener('DOMContentLoaded', () => {
-            updateCard();
-            updateStarredUI();
+    let currentList = [...rawVocabulary];
+    let currentIndex = 0;
+    let currentCategory = 'all';
+    let playbackSpeed = 1.0;
+    let starredList = JSON.parse(localStorage.getItem('cept4_v3_starred') || '[]');
+    let isFlipped = false;
+    let onlyShowStarred = false;
+
+    window.addEventListener('DOMContentLoaded', () => {
+        updateCounts();
+        applyAllFilters();
+    });
+
+    function updateCounts() {
+        document.getElementById('count-all').innerText = rawVocabulary.length;
+        document.getElementById('count-basic').innerText = rawVocabulary.filter(w => w.group === 'basic').length;
+        document.getElementById('count-medium').innerText = rawVocabulary.filter(w => w.group === 'medium').length;
+        document.getElementById('count-adv').innerText = rawVocabulary.filter(w => w.group === 'adv').length;
+        document.getElementById('star-counter').innerText = starredList.length;
+    }
+
+    function setCategory(cat) {
+        currentCategory = cat;
+        ['all', 'basic', 'medium', 'adv'].forEach(c => {
+            const btn = document.getElementById('tab-' + c);
+            if (c === cat) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        applyAllFilters();
+    }
+
+    function handleSearch() {
+        applyAllFilters();
+    }
+
+    function handleAlphaFilter() {
+        applyAllFilters();
+    }
+
+    function toggleStarredFilter() {
+        onlyShowStarred = !onlyShowStarred;
+        const btn = document.getElementById('star-filter-btn');
+        if (onlyShowStarred) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+        applyAllFilters();
+    }
+
+    function applyAllFilters() {
+        const query = document.getElementById('search-input').value.trim().toLowerCase();
+        const alpha = document.getElementById('alpha-select').value;
+
+        currentList = rawVocabulary.filter(item => {
+            const matchCategory = (currentCategory === 'all') || (item.group === currentCategory);
+            const matchAlpha = (alpha === 'all') || (item.word.toUpperCase().startsWith(alpha));
+            const matchStar = !onlyShowStarred || starredList.includes(item.id);
+            const matchQuery = !query || 
+                item.word.toLowerCase().includes(query) || 
+                item.def.includes(query) || 
+                item.chn.includes(query);
+
+            return matchCategory && matchAlpha && matchStar && matchQuery;
         });
 
-        function updateCard() {
-            if (currentFilteredList.length === 0) {
-                document.getElementById('card-id').innerText = "--";
-                document.getElementById('card-word').innerText = "沒有符合的單字";
-                document.getElementById('card-pos').innerText = "";
-                document.getElementById('card-eng').innerText = "請嘗試切換其他篩選條件或搜尋關鍵字";
-                document.getElementById('card-chn').innerText = "";
-                document.getElementById('counter').innerText = "0 / 0";
-                return;
+        currentIndex = 0;
+        renderCard();
+    }
+
+    function renderCard() {
+        const card = document.getElementById('flashcard');
+        card.classList.remove('flipped');
+        isFlipped = false;
+
+        if (currentList.length === 0) {
+            document.getElementById('card-pos').innerText = '';
+            document.getElementById('card-word-text').innerText = '無符合單字';
+            document.getElementById('card-def').innerText = '請嘗試其他篩選條件';
+            document.getElementById('example-eng').innerText = '';
+            document.getElementById('example-chn').innerText = '';
+            document.getElementById('counter-pill').innerText = '0 / 0';
+            document.getElementById('word-id-pill').innerText = '--';
+            document.getElementById('card-star-btn').classList.remove('active');
+            return;
+        }
+
+        const item = currentList[currentIndex];
+        document.getElementById('card-pos').innerText = item.pos;
+        document.getElementById('card-word-text').innerText = item.word;
+        document.getElementById('card-def').innerText = item.def;
+        document.getElementById('example-eng').innerText = item.eng;
+        document.getElementById('example-chn').innerText = item.chn;
+
+        // Status tags
+        document.getElementById('counter-pill').innerText = `${currentIndex + 1} / ${currentList.length}`;
+        document.getElementById('word-id-pill').innerText = item.id;
+
+        const levelName = item.group === 'basic' ? '初級' : (item.group === 'medium' ? '中級' : '高級');
+        document.getElementById('level-pill').innerText = levelName;
+
+        // Star
+        const isStarred = starredList.includes(item.id);
+        const starBtn = document.getElementById('card-star-btn');
+        if (isStarred) starBtn.classList.add('active');
+        else starBtn.classList.remove('active');
+    }
+
+    function handleCardClick() {
+        flipCardOnly();
+    }
+
+    function flipCardOnly() {
+        if (currentList.length === 0) return;
+        const card = document.getElementById('flashcard');
+        isFlipped = !isFlipped;
+        if (isFlipped) {
+            card.classList.add('flipped');
+            if (document.getElementById('auto-speak-check').checked) {
+                speakText(currentList[currentIndex].eng);
             }
-
-            if (currentIndex >= currentFilteredList.length) currentIndex = 0;
-            if (currentIndex < 0) currentIndex = currentFilteredList.length - 1;
-
-            const item = currentFilteredList[currentIndex];
-            
-            // Reset flip state
-            document.getElementById('flashcard').classList.remove('flipped');
-
-            // Populate data
-            document.getElementById('card-id').innerText = item.id;
-            document.getElementById('card-word').innerText = item.word;
-            document.getElementById('card-pos').innerText = item.pos + " " + item.definition;
-            document.getElementById('card-eng').innerText = item.eng;
-            document.getElementById('card-chn').innerText = item.chn;
-            document.getElementById('counter').innerText = `${currentIndex + 1} / ${currentFilteredList.length}`;
-
-            updateStarState(item.id);
+        } else {
+            card.classList.remove('flipped');
         }
+    }
 
-        function flipCard() {
-            document.getElementById('flashcard').classList.toggle('flipped');
+    function nextCard() {
+        if (currentList.length === 0) return;
+        currentIndex = (currentIndex + 1) % currentList.length;
+        renderCard();
+    }
+
+    function prevCard() {
+        if (currentList.length === 0) return;
+        currentIndex = (currentIndex - 1 + currentList.length) % currentList.length;
+        renderCard();
+    }
+
+    function shuffleCards() {
+        for (let i = currentList.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [currentList[i], currentList[j]] = [currentList[j], currentList[i]];
         }
+        currentIndex = 0;
+        renderCard();
+    }
 
-        function nextCard() {
-            if (currentFilteredList.length === 0) return;
-            currentIndex = (currentIndex + 1) % currentFilteredList.length;
-            updateCard();
+    function toggleCurrentStar() {
+        if (currentList.length === 0) return;
+        const currentItem = currentList[currentIndex];
+        const idx = starredList.indexOf(currentItem.id);
+        if (idx > -1) {
+            starredList.splice(idx, 1);
+        } else {
+            starredList.push(currentItem.id);
         }
+        localStorage.setItem('cept4_v3_starred', JSON.stringify(starredList));
+        updateCounts();
+        renderCard();
+    }
 
-        function prevCard() {
-            if (currentFilteredList.length === 0) return;
-            currentIndex = (currentIndex - 1 + currentFilteredList.length) % currentFilteredList.length;
-            updateCard();
+    function speakCurrent(e) {
+        if (e) e.stopPropagation();
+        if (currentList.length === 0) return;
+        speakText(currentList[currentIndex].word);
+    }
+
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            u.rate = playbackSpeed;
+            window.speechSynthesis.speak(u);
         }
+    }
 
-        function randomCard() {
-            if (currentFilteredList.length === 0) return;
-            currentIndex = Math.floor(Math.random() * currentFilteredList.length);
-            updateCard();
-        }
+    function togglePlaybackSpeed() {
+        if (playbackSpeed === 1.0) playbackSpeed = 1.25;
+        else if (playbackSpeed === 1.25) playbackSpeed = 0.8;
+        else playbackSpeed = 1.0;
 
-        function filterLevel(level) {
-            activeFilter = level;
-            isStarredOnly = false;
-            document.getElementById('starred-filter-btn').classList.remove('bg-amber-100', 'border-amber-300');
+        document.getElementById('speed-indicator').innerText = `⚡ ${playbackSpeed}x`;
+    }
 
-            // Update button styles
-            ['all', 'A', 'B', 'C', 'D', 'P', 'S'].forEach(l => {
-                const btn = document.getElementById(`filter-${l}`);
-                if (l === level) {
-                    btn.className = "px-3 py-1 text-xs font-semibold rounded-lg bg-indigo-600 text-white transition";
-                } else {
-                    btn.className = "px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
-                }
-            });
+    /* Modal list */
+    function openOverviewModal() {
+        const modal = document.getElementById('overview-modal');
+        const list = document.getElementById('modal-list');
+        list.innerHTML = '';
 
-            applyFilters();
-        }
+        rawVocabulary.forEach((item, idx) => {
+            const row = document.createElement('div');
+            row.className = 'list-item';
+            row.innerHTML = `
+                <span class="list-item-id">${item.id}</span>
+                <span class="list-item-word">${item.word}</span>
+                <span class="list-item-def">${item.pos} ${item.def}</span>
+            `;
+            row.onclick = () => {
+                currentCategory = 'all';
+                ['all', 'basic', 'medium', 'adv'].forEach(c => {
+                    document.getElementById('tab-' + c).classList.toggle('active', c === 'all');
+                });
+                document.getElementById('search-input').value = '';
+                document.getElementById('alpha-select').value = 'all';
+                onlyShowStarred = false;
+                document.getElementById('star-filter-btn').classList.remove('active');
 
-        function toggleStarredFilter() {
-            isStarredOnly = !isStarredOnly;
-            const btn = document.getElementById('starred-filter-btn');
-            if (isStarredOnly) {
-                btn.className = "px-2.5 py-1 text-xs rounded-lg border border-amber-300 bg-amber-50 text-amber-700 transition flex items-center space-x-1 font-semibold";
-            } else {
-                btn.className = "px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-white hover:bg-amber-50 text-slate-600 transition flex items-center space-x-1";
-            }
-            applyFilters();
-        }
+                currentList = [...rawVocabulary];
+                const foundIdx = currentList.findIndex(w => w.id === item.id);
+                currentIndex = foundIdx !== -1 ? foundIdx : 0;
 
-        function searchWords() {
-            applyFilters();
-        }
-
-        function applyFilters() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            
-            currentFilteredList = wordsData.filter(item => {
-                const matchesLetter = activeFilter === 'all' || item.word.toUpperCase().startsWith(activeFilter);
-                const matchesStar = !isStarredOnly || starredIds.includes(item.id);
-                const matchesQuery = item.word.toLowerCase().includes(query) || item.definition.includes(query) || item.chn.includes(query);
-                return matchesLetter && matchesStar && matchesQuery;
-            });
-
-            currentIndex = 0;
-            updateCard();
-        }
-
-        function toggleStar() {
-            if (currentFilteredList.length === 0) return;
-            const currentItem = currentFilteredList[currentIndex];
-            const idx = starredIds.indexOf(currentItem.id);
-            if (idx > -1) {
-                starredIds.splice(idx, 1);
-            } else {
-                starredIds.push(currentItem.id);
-            }
-            localStorage.setItem('cept4_starred', JSON.stringify(starredIds));
-            updateStarState(currentItem.id);
-            updateStarredUI();
-        }
-
-        function updateStarState(id) {
-            const isStarred = starredIds.includes(id);
-            const starClass = isStarred ? "text-amber-400 text-lg transition" : "text-slate-300 hover:text-amber-400 text-lg transition";
-            document.getElementById('star-btn').className = starClass;
-            document.getElementById('star-btn-back').className = isStarred ? "text-amber-400 text-lg transition" : "text-slate-500 hover:text-amber-400 text-lg transition";
-        }
-
-        function updateStarredUI() {
-            document.getElementById('starred-count').innerText = starredIds.length;
-        }
-
-        function changeSpeed(speed) {
-            currentSpeed = speed;
-            [0.5, 1.0, 1.5].forEach(s => {
-                const btn = document.getElementById(`speed-${s}`);
-                if (s === speed) {
-                    btn.className = "px-2 py-1 rounded bg-indigo-600 text-white font-medium";
-                } else {
-                    btn.className = "px-2 py-1 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 transition";
-                }
-            });
-        }
-
-        function speakWord() {
-            if (currentFilteredList.length === 0) return;
-            const item = currentFilteredList[currentIndex];
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(item.word);
-                utterance.lang = 'en-US';
-                utterance.rate = currentSpeed;
-                window.speechSynthesis.speak(utterance);
-            } else {
-                alert("您的瀏覽器不支援語音朗讀功能");
-            }
-        }
-
-        function openOverviewModal() {
-            const container = document.getElementById('word-list-container');
-            container.innerHTML = '';
-            wordsData.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = "py-2.5 flex justify-between items-center text-sm hover:bg-slate-50 px-2 rounded cursor-pointer";
-                div.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <span class="text-xs font-bold text-slate-400 w-10">${item.id}</span>
-                        <span class="font-bold text-slate-800">${item.word}</span>
-                        <span class="text-xs text-slate-500">${item.pos} ${item.definition}</span>
-                    </div>
-                    <span class="text-xs text-slate-600">${item.chn}</span>
-                `;
-                div.onclick = () => {
-                    // Find in filtered list or switch
-                    const idx = currentFilteredList.findIndex(w => w.id === item.id);
-                    if (idx > -1) {
-                        currentIndex = idx;
-                    } else {
-                        currentFilteredList = [item];
-                        currentIndex = 0;
-                    }
-                    updateCard();
-                    closeOverviewModal();
-                };
-                container.appendChild(div);
-            });
-            document.getElementById('overview-modal').classList.remove('hidden');
-        }
-
-        function closeOverviewModal() {
-            document.getElementById('overview-modal').classList.add('hidden');
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'INPUT') return;
-            if (e.key === 'ArrowRight') nextCard();
-            if (e.key === 'ArrowLeft') prevCard();
-            if (e.key === ' ' || e.key === 'Enter') {
-                e.preventDefault();
-                flipCard();
-            }
+                renderCard();
+                closeOverviewModal();
+            };
+            list.appendChild(row);
         });
-    </script>
+
+        modal.classList.add('open');
+    }
+
+    function closeOverviewModal(e) {
+        document.getElementById('overview-modal').classList.remove('open');
+    }
+
+    // Keyboard support
+    window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextCard();
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevCard();
+        if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            flipCardOnly();
+        }
+    });
+</script>
 </body>
 </html>
