@@ -1,868 +1,455 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CEPT 4級單字</title>
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-light: #eef2ff;
-            --primary-dark: #4338ca;
-            --card-border: #e2e8f0;
-            --text-main: #1e293b;
-            --text-sub: #64748b;
-            --bg-page: #f8fafc;
-            --bg-card: #ffffff;
-            --tag-bg: #e0e7ff;
-            --tag-text: #4338ca;
-            --star-gold: #eab308;
-            --shadow-card: 0 4px 15px -1px rgba(0, 0, 0, 0.05), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
-        }
+{
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+-webkit-tap-highlight-color: transparent;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+background: var(--bg);
+color: var(--text-main);
+display: flex;
+justify-content: center;
+align-items: flex-start;
+min-height: 100vh;
+padding: 6px;
+overflow-x: hidden;
+}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
-            background-color: var(--bg-page);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 12px;
-        }
+.app-container {
+width: 100%;
+max-width: 480px;
+background: #fff;
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+padding: 10px 12px;
+display: flex;
+flex-direction: column;
+height: 98vh;
+max-height: 720px;
+overflow: hidden;
+}
 
-        .app-container {
-            width: 100%;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+.top-bar {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding-bottom: 6px;
+border-bottom: 1px solid var(--border);
+margin-bottom: 6px;
+gap: 6px;
+}
 
-        /* Top Header Bar */
-        .header-bar {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 8px;
-            align-items: center;
-        }
+.title-tag {
+font-size: 13px;
+font-weight: 800;
+color: var(--primary);
+background: var(--primary-light);
+padding: 3px 8px;
+border-radius: 6px;
+display: inline-flex;
+align-items: center;
+gap: 4px;
+letter-spacing: 0.3px;
+}
 
-        .brand-badge {
-            background: #ede9fe;
-            color: #5b21b6;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
+.controls-row {
+display: flex;
+align-items: center;
+gap: 5px;
+}
 
-        .header-btn {
-            background: white;
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 8px 4px;
-            font-size: 0.8rem;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-            transition: all 0.15s ease;
-        }
-        .header-btn:active {
-            transform: scale(0.96);
-            background: #f1f5f9;
-        }
+.mini-btn {
+border: 1px solid var(--border);
+background: #fff;
+color: var(--text-main);
+border-radius: 6px;
+padding: 4px 7px;
+font-size: 11px;
+font-weight: 600;
+cursor: pointer;
+display: inline-flex;
+align-items: center;
+gap: 3px;
+transition: all 0.15s ease;
+}
+.mini-btn:hover {
+background: var(--bg);
+}
+.mini-btn.active {
+background: var(--primary);
+color: #fff;
+border-color: var(--primary);
+}
 
-        /* Category Filter Tabs */
-        .category-tabs {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-        }
+/* 詞性分類頁籤 */
+.level-tabs {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 4px;
+margin-bottom: 6px;
+}
 
-        .tab-btn {
-            padding: 8px 4px;
-            border: 1px solid var(--card-border);
-            border-radius: 10px;
-            background: white;
-            color: var(--text-sub);
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
+.tab-btn {
+background: #f1f5f9;
+border: none;
+padding: 5px 2px;
+border-radius: 6px;
+font-size: 11px;
+font-weight: 700;
+color: #64748b;
+cursor: pointer;
+text-align: center;
+}
+.tab-btn.active {
+background: var(--primary);
+color: #fff;
+box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+}
+.tab-btn.noun.active { background: var(--pos-noun); }
+.tab-btn.verb.active { background: var(--pos-verb); }
+.tab-btn.adj.active { background: var(--pos-adj); }
 
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
-        }
+.search-strip {
+display: flex;
+gap: 5px;
+margin-bottom: 6px;
+align-items: center;
+}
 
-        /* Search & Dropdown Bar */
-        .search-bar-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
+.search-box {
+flex: 1;
+position: relative;
+}
 
-        .search-box-wrapper {
-            flex: 1.4;
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+.search-box input {
+width: 100%;
+border: 1px solid var(--border);
+border-radius: 8px;
+padding: 5px 6px 5px 24px;
+font-size: 11px;
+outline: none;
+}
+.search-icon {
+position: absolute;
+left: 7px;
+top: 50%;
+transform: translateY(-50%);
+font-size: 10px;
+color: var(--text-sub);
+}
 
-        .search-input {
-            width: 100%;
-            padding: 8px 12px 8px 30px;
-            border-radius: 10px;
-            border: 1px solid var(--card-border);
-            background: white;
-            font-size: 0.85rem;
-            outline: none;
-        }
+.filter-select {
+border: 1px solid var(--border);
+border-radius: 8px;
+padding: 4px 5px;
+font-size: 11px;
+background: #fff;
+color: var(--text-main);
+outline: none;
+max-width: 92px;
+}
 
-        .search-icon {
-            position: absolute;
-            left: 10px;
-            font-size: 0.8rem;
-            color: var(--text-sub);
-        }
+.meta-bar {
+display: flex;
+align-items: center;
+justify-content: space-between;
+font-size: 11px;
+color: var(--text-sub);
+margin-bottom: 6px;
+padding: 0 2px;
+}
 
-        .alpha-select {
-            flex: 1;
-            padding: 8px;
-            border-radius: 10px;
-            border: 1px solid var(--card-border);
-            background: white;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            outline: none;
-        }
+.badge-group {
+display: flex;
+align-items: center;
+gap: 4px;
+}
 
-        .star-filter-btn {
-            background: white;
-            border: 1px solid var(--card-border);
-            border-radius: 10px;
-            padding: 8px 10px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-        .star-filter-btn.active {
-            background: #fef9c3;
-            border-color: #fde047;
-            color: #854d0e;
-        }
+.index-badge {
+background: #f1f5f9;
+color: #475569;
+padding: 2px 6px;
+border-radius: 10px;
+font-weight: 700;
+font-size: 10.5px;
+}
 
-        /* Status & Tool Row */
-        .status-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 4px;
-            font-size: 0.85rem;
-        }
+.pos-badge {
+font-size: 10px;
+font-weight: 700;
+padding: 2px 6px;
+border-radius: 8px;
+color: #fff;
+background: var(--primary);
+}
 
-        .status-tags {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+.toggle-label {
+display: flex;
+align-items: center;
+gap: 3px;
+cursor: pointer;
+font-size: 10.5px;
+}
+.toggle-label input {
+accent-color: var(--primary);
+}
 
-        .counter-pill {
-            background: #e2e8f0;
-            color: #334155;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.75rem;
-        }
+.card-viewport {
+flex: 1;
+perspective: 1000px;
+position: relative;
+cursor: pointer;
+min-height: 220px;
+margin-bottom: 8px;
+}
 
-        .level-pill {
-            background: #38bdf8;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.75rem;
-        }
+.flipper {
+width: 100%;
+height: 100%;
+position: relative;
+transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+transform-style: preserve-3d;
+}
 
-        .word-id-pill {
-            color: var(--text-sub);
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
+.card-viewport.flipped .flipper {
+transform: rotateY(180deg);
+}
 
-        .card-tools {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.card-face {
+position: absolute;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+border-radius: var(--radius);
+backface-visibility: hidden;
+-webkit-backface-visibility: hidden;
+padding: 14px 12px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+border: 1.5px solid #e0f2fe;
+box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
 
-        .star-toggle {
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: #cbd5e1;
-            transition: color 0.15s ease;
-        }
-        .star-toggle.active {
-            color: var(--star-gold);
-        }
+.front {
+background: linear-gradient(145deg, #ffffff, #f0f9ff);
+align-items: center;
+justify-content: center;
+text-align: center;
+}
 
-        .auto-speak-label {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            cursor: pointer;
-        }
+.front-pos {
+font-size: 12.5px;
+font-weight: 700;
+color: var(--primary-dark);
+background: var(--primary-light);
+padding: 2px 9px;
+border-radius: 10px;
+margin-bottom: 8px;
+}
 
-        /* Flashcard Area */
-        .flashcard-wrapper {
-            perspective: 1000px;
-            min-height: 290px;
-            width: 100%;
-        }
+.front-word-wrap {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+margin-bottom: 6px;
+width: 100%;
+}
 
-        .flashcard {
-            width: 100%;
-            min-height: 290px;
-            background: var(--bg-card);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            box-shadow: var(--shadow-card);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 24px 20px;
-            text-align: center;
-            position: relative;
-            transition: transform 0.4s ease, border-color 0.2s;
-        }
-        .flashcard:hover {
-            border-color: #cbd5e1;
-        }
+.front-word {
+font-size: 28px;
+font-weight: 800;
+color: #0f172a;
+letter-spacing: -0.5px;
+word-break: break-word;
+}
 
-        .card-word {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+.clean-speaker-btn {
+background: var(--primary-light);
+color: var(--primary-dark);
+border: 1px solid rgba(2, 132, 199, 0.2);
+width: 32px;
+height: 32px;
+border-radius: 50%;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+flex-shrink: 0;
+transition: all 0.15s ease;
+}
+.clean-speaker-btn:hover {
+background: var(--primary);
+color: #fff;
+}
+.clean-speaker-btn.playing {
+background: var(--primary);
+color: #fff;
+}
 
-        .speaker-btn {
-            background: none;
-            border: none;
-            font-size: 1.25rem;
-            color: var(--primary);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
+.front-hint {
+margin-top: 10px;
+font-size: 11px;
+color: #94a3b8;
+}
 
-        .card-phonetic {
-            font-size: 0.95rem;
-            color: #0284c7;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
+.back {
+background: linear-gradient(145deg, #ffffff, #fdfbf7);
+transform: rotateY(180deg);
+overflow-y: auto;
+justify-content: flex-start;
+}
 
-        .card-definition {
-            font-size: 1.05rem;
-            color: #475569;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
+.back-def-box {
+margin-bottom: 8px;
+padding-bottom: 6px;
+border-bottom: 1px dashed var(--border);
+}
 
-        /* Back details */
-        .card-back-content {
-            display: none;
-            width: 100%;
-            text-align: left;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 16px;
-            margin-top: 10px;
-        }
+.back-word-title {
+font-size: 15px;
+font-weight: 800;
+color: var(--primary-dark);
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 3px;
+}
 
-        .flashcard.flipped .card-back-content {
-            display: block;
-        }
+.back-def-text {
+font-size: 12.5px;
+font-weight: 600;
+color: #334155;
+line-height: 1.4;
+}
 
-        .example-sentence {
-            font-size: 0.95rem;
-            color: #1e293b;
-            line-height: 1.45;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
+.example-block {
+flex: 1;
+overflow-y: auto;
+}
 
-        .example-trans {
-            font-size: 0.85rem;
-            color: #64748b;
-            line-height: 1.4;
-        }
+.example-item {
+background: rgba(241, 245, 249, 0.8);
+border-radius: 8px;
+padding: 7px 9px;
+margin-bottom: 5px;
+border-left: 3px solid var(--primary);
+position: relative;
+cursor: pointer;
+}
 
-        /* Bottom Control Action Bar */
-        .action-bar {
-            display: grid;
-            grid-template-columns: 1fr 1.6fr 1fr;
-            gap: 10px;
-            align-items: center;
-        }
+.example-en {
+font-size: 11.5px;
+color: #1e293b;
+line-height: 1.35;
+font-weight: 500;
+padding-right: 26px;
+}
 
-        .action-btn {
-            border: none;
-            padding: 12px 14px;
-            border-radius: 14px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.15s ease;
-        }
+.example-zh {
+font-size: 11px;
+color: #64748b;
+margin-top: 2px;
+line-height: 1.3;
+}
 
-        .btn-prev, .btn-next {
-            background: white;
-            border: 1px solid var(--card-border);
-            color: #334155;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-        }
+.sentence-speak-btn {
+position: absolute;
+right: 5px;
+top: 5px;
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 50%;
+width: 24px;
+height: 24px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+color: var(--primary);
+}
 
-        .btn-flip {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.28);
-        }
+.bottom-actions {
+display: grid;
+grid-template-columns: 1fr 1.6fr 1fr;
+gap: 6px;
+margin-top: 2px;
+}
 
-        .action-btn:active {
-            transform: scale(0.97);
-        }
+.action-btn {
+border: none;
+border-radius: 10px;
+padding: 8px 4px;
+font-size: 12.5px;
+font-weight: 700;
+cursor: pointer;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 1px;
+}
 
-        /* Overview List Modal */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            padding: 16px;
-        }
-        .modal-overlay.open {
-            display: flex;
-        }
+.btn-nav { background: #f1f5f9; color: #334155; }
+.btn-flip { background: var(--primary); color: #fff; }
 
-        .modal-body {
-            background: white;
-            width: 100%;
-            max-width: 520px;
-            border-radius: 20px;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-        }
+.star-btn {
+background: none;
+border: none;
+font-size: 18px;
+cursor: pointer;
+color: #cbd5e1;
+transition: transform 0.15s ease;
+}
+.star-btn.starred { color: #f59e0b; }
 
-        .modal-header {
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--card-border);
-            font-weight: 700;
-        }
+.list-modal {
+position: fixed;
+top: 0; left: 0;
+width: 100vw; height: 100vh;
+background: rgba(15, 23, 42, 0.5);
+display: none;
+justify-content: center;
+align-items: flex-end;
+z-index: 999;
+}
+.list-modal.open { display: flex; }
+.modal-sheet {
+width: 100%; max-width: 480px; max-height: 80vh;
+background: #fff; border-radius: 18px 18px 0 0;
+padding: 12px; display: flex; flex-direction: column;
+}
+.sheet-header {
+display: flex; justify-content: space-between; align-items: center;
+padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 6px;
+}
+.sheet-list { overflow-y: auto; flex: 1; }
+.sheet-item {
+display: flex; justify-content: space-between; align-items: center;
+padding: 7px 5px; border-bottom: 1px solid #f8fafc; cursor: pointer;
+}
+.sheet-item-word { font-weight: 700; font-size: 12.5px; color: #0f172a; }
+.sheet-item-def { font-size: 11px; color: #64748b; max-width: 190px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .modal-list {
-            padding: 8px 12px;
-            overflow-y: auto;
-            flex: 1;
-        }
+#nativeAudioPlayer { display: none; }
 
-        .list-item {
-            padding: 10px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #f1f5f9;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-        .list-item:hover {
-            background: #f8fafc;
-        }
-        .list-item-id {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 0.8rem;
-            width: 45px;
-        }
-        .list-item-word {
-            font-weight: 700;
-            color: #0f172a;
-            flex: 1;
-        }
-        .list-item-def {
-            color: var(--text-sub);
-            font-size: 0.85rem;
-        }
-    </style>
-</head>
-<body>
 
-<div class="app-container">
-    <!-- Top Header Bar -->
-    <div class="header-bar">
-        <div class="brand-badge">
-            <span>🎯</span> CEPT 4級單字
-        </div>
-        <button class="header-btn" onclick="openOverviewModal()">
-            📋 總覽
+  <div class="card-face back">
+    <div class="back-def-box">
+      <div class="back-word-title">
+        <span id="backWord">able</span>
+        <button class="clean-speaker-btn" style="width:24px;height:24px;" onclick="speakCurrentWord(event)" title="聆聽發音">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+          </svg>
         </button>
-        <button class="header-btn" onclick="shuffleCards()">
-            🎲 隨機
-        </button>
-        <button class="header-btn" onclick="togglePlaybackSpeed()" id="speed-indicator">
-            ⚡ 1.0x
-        </button>
+      </div>
+      <div class="back-def-text" id="backDef">(adj.) 有能力的</div>
     </div>
-
-    <!-- Category Tabs -->
-    <div class="category-tabs">
-        <button class="tab-btn active" id="tab-all" onclick="setCategory('all')">全部 (<span id="count-all">0</span>)</button>
-        <button class="tab-btn" id="tab-basic" onclick="setCategory('basic')">基礎 (<span id="count-basic">0</span>)</button>
-        <button class="tab-btn" id="tab-medium" onclick="setCategory('medium')">中級 (<span id="count-medium">0</span>)</button>
-        <button class="tab-btn" id="tab-adv" onclick="setCategory('adv')">高級 (<span id="count-adv">0</span>)</button>
-    </div>
-
-    <!-- Search & Filter Controls -->
-    <div class="search-bar-row">
-        <div class="search-box-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-input" placeholder="搜尋單字、中文..." oninput="handleSearch()">
-        </div>
-        <select class="alpha-select" id="alpha-select" onchange="handleAlphaFilter()">
-            <option value="all">全部 (A-Z)</option>
-            <option value="A">A 開頭</option>
-            <option value="B">B 開頭</option>
-            <option value="C">C 開頭</option>
-            <option value="D">D 開頭</option>
-            <option value="E">E 開頭</option>
-            <option value="F">F 開頭</option>
-            <option value="G">G 開頭</option>
-            <option value="H">H 開頭</option>
-            <option value="I">I 開頭</option>
-            <option value="P">P 開頭</option>
-            <option value="R">R 開頭</option>
-            <option value="S">S 開頭</option>
-            <option value="T">T 開頭</option>
-            <option value="W">W 開頭</option>
-        </select>
-        <button class="star-filter-btn" id="star-filter-btn" onclick="toggleStarredFilter()">
-            ⭐ <span id="star-counter">0</span>
-        </button>
-    </div>
-
-    <!-- Status Information Row -->
-    <div class="status-row">
-        <div class="status-tags">
-            <span class="counter-pill" id="counter-pill">1 / 100</span>
-            <span class="level-pill" id="level-pill">四級</span>
-            <span class="word-id-pill" id="word-id-pill">A01</span>
-        </div>
-        <div class="card-tools">
-            <span class="star-toggle" id="card-star-btn" onclick="toggleCurrentStar()">★</span>
-            <label class="auto-speak-label">
-                <input type="checkbox" id="auto-speak-check" checked>
-                翻轉朗讀
-            </label>
-        </div>
-    </div>
-
-    <!-- Card Container -->
-    <div class="flashcard-wrapper" onclick="handleCardClick()">
-        <div class="flashcard" id="flashcard">
-            <div class="card-phonetic" id="card-pos">(adj.)</div>
-            <div class="card-word">
-                <span id="card-word-text">able</span>
-                <button class="speaker-btn" onclick="speakCurrent(event)" title="語音朗讀">🔊</button>
-            </div>
-            <div class="card-definition" id="card-def">有能力的</div>
-
-            <!-- Back Detailed Example -->
-            <div class="card-back-content" id="card-back-content">
-                <div class="example-sentence" id="example-eng">He was not able to pay his bills.</div>
-                <div class="example-trans" id="example-chn">他繳不起賬單。</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Action Navigation Bar -->
-    <div class="action-bar">
-        <button class="action-btn btn-prev" onclick="prevCard()">
-            ▲ 上一個
-        </button>
-        <button class="action-btn btn-flip" onclick="flipCardOnly()">
-            🔄 翻轉卡片
-        </button>
-        <button class="action-btn btn-next" onclick="nextCard()">
-            ▼ 下一個
-        </button>
-    </div>
+    <div class="example-block" id="exampleBlock"></div>
+  </div>
 </div>
-
-<!-- Overview Modal -->
-<div class="modal-overlay" id="overview-modal" onclick="closeOverviewModal(event)">
-    <div class="modal-body" onclick="event.stopPropagation()">
-        <div class="modal-header">
-            <span>單字總覽列表</span>
-            <button onclick="closeOverviewModal()" style="border:none;background:none;font-size:1.2rem;cursor:pointer;">✕</button>
-        </div>
-        <div class="modal-list" id="modal-list"></div>
-    </div>
-</div>
-
-<script>
-    // CEPT 4級題庫
-    const rawVocabulary = [
-        { id: "A01", word: "able", pos: "(adj.)", def: "有能力的", eng: "He was not able to pay his bills.", chn: "他繳不起賬單。", group: "basic" },
-        { id: "A01-2", word: "ability", pos: "(n.)", def: "能力, 才能", eng: "He has the ability to type 100 English words per minute.", chn: "他能夠每分鐘打100個英文字。", group: "medium" },
-        { id: "A02", word: "abroad", pos: "(adv.)", def: "在(到)國外", eng: "We plan to travel abroad this summer.", chn: "我們計畫在今年夏天到國外旅行。", group: "basic" },
-        { id: "A03", word: "accept", pos: "(v.)", def: "接受", eng: "This gift is too expensive; I cannot accept it.", chn: "這禮物太貴了, 我不能接受。", group: "basic" },
-        { id: "A03-2", word: "acceptable", pos: "(adj.)", def: "可接受的", eng: "Your work is not acceptable. Please do it again.", chn: "你的工作是不可以接受的, 請重做。", group: "adv" },
-        { id: "A04", word: "according to", pos: "(prep.)", def: "依照, 和諧的", eng: "According to the weather report, it is going to rain tomorrow.", chn: "依照氣象報告, 明天會下雨。", group: "basic" },
-        { id: "A05", word: "across", pos: "(prep./adv.)", def: "橫過, 穿過", eng: "It is very dangerous to swim across the river.", chn: "游泳過河很危險, 因為水太深了。", group: "basic" },
-        { id: "A06", word: "act", pos: "(v./n.)", def: "假裝, 行為", eng: "The little girl acts like a mother.", chn: "這小女孩假裝得像母親一樣。", group: "basic" },
-        { id: "A06-2", word: "action", pos: "(n.)", def: "動作, 行為", eng: "We must take action before it is too late.", chn: "在為時已晚之前, 我們必須採取行動。", group: "medium" },
-        { id: "A07", word: "actor", pos: "(n.)", def: "男演員", eng: "His father is a famous actor.", chn: "他的父親是個很有名的演員。", group: "basic" },
-        { id: "A08", word: "add", pos: "(v.)", def: "加, 增加", eng: "He added one more spoon of sugar to make the cake sweeter.", chn: "他多加了一湯匙的糖, 使蛋糕嚐起來更甜一點。", group: "basic" },
-        { id: "A09", word: "address", pos: "(n./v.)", def: "地址, 稱呼, 演說", eng: "Please write down your address on this paper.", chn: "請把你的地址寫在這張紙上。", group: "medium" },
-        { id: "A10", word: "adult", pos: "(n.)", def: "成人, 大人", eng: "This movie is for adults only, not for children.", chn: "這部電影只給成年人看的, 不是小孩看的。", group: "basic" },
-        { id: "A11", word: "afraid", pos: "(adj.)", def: "害怕的, 恐怕的", eng: "Jennifer is afraid of snakes and mice.", chn: "珍妮佛怕蛇和老鼠。", group: "basic" },
-        { id: "A14", word: "against", pos: "(prep.)", def: "對抗, 違反, 靠", eng: "We will fight against the enemy.", chn: "我們將與敵人對抗。", group: "medium" },
-        { id: "A15", word: "age", pos: "(n.)", def: "年齡, 時代", eng: "You look much younger than your age.", chn: "你看起來比實際年齡年輕許多。", group: "basic" },
-        { id: "A17", word: "agree", pos: "(v.)", def: "同意", eng: "We agree that smoking is harmful to our health.", chn: "我們都贊同吸煙是有害健康的。", group: "basic" },
-        { id: "A18", word: "ahead", pos: "(adv.)", def: "在前的", eng: "Although I left home later, I arrived ahead of her.", chn: "雖然我比珍晚出門，我卻在她之前到達。", group: "medium" },
-        { id: "A24", word: "alarm", pos: "(n./v.)", def: "鬧鐘, 警報器, 警告", eng: "You'd better set an alarm or have someone wake you up.", chn: "你最好設鬧鐘或找人叫醒你。", group: "medium" },
-        { id: "A26", word: "alive", pos: "(adj.)", def: "活著的, 有活力的", eng: "Although Tom is seventy years old, he is still very alive.", chn: "雖然約翰70歲了, 他仍然非常有活力。", group: "medium" },
-        { id: "A27", word: "allow", pos: "(v.)", def: "允許", eng: "No food and drinks are allowed aboard the MRT.", chn: "在捷運上飲食是不被允許的。", group: "basic" },
-        { id: "B01", word: "baby-sit", pos: "(v.)", def: "當臨時保姆", eng: "I baby-sit in my neighborhood to make some money.", chn: "我在附近地區當臨時保姆來賺一點錢。", group: "medium" },
-        { id: "B03", word: "badly", pos: "(adv.)", def: "壞, 拙劣地, 罪惡地", eng: "I think he behaved very badly.", chn: "我認為他行為表現得很壞。", group: "adv" },
-        { id: "B06", word: "bakery", pos: "(n.)", def: "麵包店", eng: "The bakery around the corner offers fresh bread at 3 p.m.", chn: "每天下午三點, 街角的那間麵包店供應新鮮的麵包。", group: "basic" },
-        { id: "B14", word: "baseball", pos: "(n.)", def: "棒球", eng: "The Yankees is one of the most popular professional baseball teams.", chn: "洋基隊是美國最受歡迎的職業棒球隊之一。", group: "basic" },
-        { id: "B15", word: "basic", pos: "(adj.)", def: "基本的", eng: "He has basic ability of English.", chn: "他有基礎的英文能力。", group: "medium" },
-        { id: "B20", word: "battle", pos: "(n./v.)", def: "戰鬥, 奮鬥", eng: "The shortage of food caused a battle between two lions.", chn: "食物短缺引起兩隻獅子之間的戰鬥。", group: "adv" },
-        { id: "B22", word: "bear", pos: "(v.)", def: "承受, 忍受", eng: "Will the ice on the lake bear your weight?", chn: "湖面上的冰層可以承受你的重量嗎?", group: "medium" },
-        { id: "B34", word: "believe", pos: "(v.)", def: "相信", eng: "Believe it or not, I can eat up a whole chicken.", chn: "信不信由你, 我餓到可以吃掉整隻雞。", group: "basic" },
-        { id: "B40", word: "besides", pos: "(adv./prep.)", def: "此外, 除...之外", eng: "It is out of our price range; besides, it is too big.", chn: "這超出預算，除此以外也太大了。", group: "medium" },
-        { id: "B66", word: "brave", pos: "(adj.)", def: "勇敢的", eng: "The boy jumped into the pool to save his friend.", chn: "這個男孩很勇敢, 跳進游泳池去救朋友。", group: "basic" },
-        { id: "B71", word: "brief", pos: "(adj./v.)", def: "簡短的, 簡報", eng: "The speech is too long. Please make it brief.", chn: "這個演講太長了, 請簡短。", group: "adv" },
-        { id: "C05", word: "calm", pos: "(adj./n.)", def: "寧靜的, 心平氣和的", eng: "He has a very calm manner.", chn: "他舉止沉著鎮靜。", group: "medium" },
-        { id: "C14", word: "careless", pos: "(adj.)", def: "隨便的, 粗心的", eng: "She is careless about her clothes.", chn: "她對穿著一點都不講究。", group: "medium" },
-        { id: "C22", word: "cause", pos: "(n./v.)", def: "原因, 導致", eng: "Smoking is the main cause of lung cancer.", chn: "抽菸是肺癌的主要原因。", group: "medium" },
-        { id: "C28", word: "certainly", pos: "(adv.)", def: "確定地", eng: "Health is certainly far more important than money.", chn: "健康確定是遠比金錢還重要。", group: "adv" },
-        { id: "C32", word: "changeable", pos: "(adj.)", def: "易變的, 不定的", eng: "His temper has been changeable this week.", chn: "這星期他脾氣變化無常。", group: "adv" },
-        { id: "C34", word: "cheat", pos: "(v.)", def: "欺騙, 作弊", eng: "The student was caught cheating in the exam.", chn: "那學生考試作弊被逮到了。", group: "basic" },
-        { id: "C40", word: "chief", pos: "(n./adj.)", def: "首領, 主要的", eng: "Cars are the chief reason for the city's pollution.", chn: "汽車是造成這城市汙染的主要原因。", group: "adv" },
-        { id: "C72", word: "comfortable", pos: "(adj.)", def: "舒服的, 自在的", eng: "The room in this hotel is large and comfortable.", chn: "這旅館的房間既寬敞又舒適。", group: "basic" },
-        { id: "C78", word: "control", pos: "(v.)", def: "控制, 操縱", eng: "The teacher could not control them.", chn: "老師並無法控制住他們。", group: "medium" },
-        { id: "C79", word: "convenient", pos: "(adj.)", def: "方便的", eng: "It is not convenient for me to give you a ride today.", chn: "今天不方便讓你搭便車。", group: "medium" },
-        { id: "D11", word: "decision", pos: "(n.)", def: "決定", eng: "I try not to make the wrong decision.", chn: "我試著不要做出錯誤的決定。", group: "medium" },
-        { id: "D16", word: "independent", pos: "(adj.)", def: "獨立的", eng: "Although he is twenty years old, he can't be independent.", chn: "雖然他已經20歲了, 但還是無法獨立。", group: "adv" },
-        { id: "D25", word: "difference", pos: "(n.)", def: "差別", eng: "There is a big difference in quality between these two.", chn: "這兩個產品的品質有很大的差異。", group: "medium" },
-        { id: "D26", word: "difficulty", pos: "(n.)", def: "困難", eng: "My friend has great difficulty finding a job.", chn: "我朋友在找工作上遭遇很大的困難。", group: "medium" },
-        { id: "D30", word: "discover", pos: "(v.)", def: "發現, 發覺", eng: "Columbus discovered America in 1492.", chn: "在1492年當時, 哥倫布發現美洲大陸。", group: "medium" },
-        { id: "D31", word: "discuss", pos: "(v.)", def: "討論", eng: "They are discussing where they can have a picnic.", chn: "他們正在討論野餐的地點。", group: "basic" },
-        { id: "P03", word: "painful", pos: "(adj.)", def: "痛苦的, 疼痛的", eng: "Jack's back is so painful that he cannot stand upright.", chn: "傑克的背疼痛不已, 連站都站不直。", group: "adv" },
-        { id: "P18", word: "peaceful", pos: "(adj.)", def: "和平的, 平靜的", eng: "All I want is to have a peaceful and quiet time.", chn: "我想要安詳寧靜的時刻渡過下午。", group: "medium" },
-        { id: "P52", word: "polite", pos: "(adj.)", def: "有禮貌的", eng: "Children are taught to be polite to others.", chn: "小孩子被教導要對人有禮貌。", group: "basic" },
-        { id: "P68", word: "prepare", pos: "(v.)", def: "準備", eng: "He didn’t have enough time to prepare for the exam.", chn: "他沒有足夠的時間好好準備考試。", group: "basic" },
-        { id: "P77", word: "progress", pos: "(n./v.)", def: "進步, 發展", eng: "Your Spanish really progressed!", chn: "你的西班牙語真的進步很多。", group: "medium" },
-        { id: "P78", word: "prove", pos: "(v.)", def: "證明, 證實", eng: "The fingerprints proved that she was the murderer.", chn: "指紋證明她就是謀殺犯。", group: "adv" },
-        { id: "S02", word: "safety", pos: "(n.)", def: "安全, 平安", eng: "The teacher led children to a place of safety.", chn: "老師帶領孩子們到安全的地方。", group: "medium" },
-        { id: "S30", word: "selfish", pos: "(adj.)", def: "自私的", eng: "My friend is not a selfish girl. Instead, she is generous.", chn: "我朋友不是自私自利的女孩，她很大方。", group: "medium" },
-        { id: "S69", word: "simple", pos: "(adj.)", def: "簡單的, 單純的", eng: "It is a simple task and will take you little time.", chn: "它是一項很簡單的任務，不會花費太多力氣。", group: "basic" },
-        { id: "S75", word: "skillful", pos: "(adj.)", def: "有技術的, 熟練的", eng: "I am skillful enough to control the machine now.", chn: "我現在有足夠的技能來控制這台機器。", group: "adv" },
-        { id: "S153", word: "successful", pos: "(adj.)", def: "成功的", eng: "My first attempt was not successful.", chn: "我首次想要破他紀錄但並未成功。", group: "medium" },
-        { id: "T17", word: "teenager", pos: "(n.)", def: "青少年", eng: "Teenagers have more freedom today than in the past.", chn: "現今的青少年比過去享有更多自由。", group: "basic" },
-        { id: "T22", word: "terrible", pos: "(adj.)", def: "可怕的, 嚴重的", eng: "A terrible accident happened on the highway last night.", chn: "昨晚高速公路上發生了一場可怕的意外。", group: "medium" },
-        { id: "T77", word: "trouble", pos: "(n./v.)", def: "麻煩, 煩惱", eng: "If I don’t get home by ten, I’ll be in trouble.", chn: "如果十點前沒抵達家門，我就麻煩大了。", group: "basic" },
-        { id: "W11", word: "wasteful", pos: "(adj.)", def: "浪費的, 揮霍的", eng: "It is wasteful that you throw so much food away!", chn: "你把那麼多食物扔掉，太浪費了！", group: "adv" },
-        { id: "W17", word: "wealthy", pos: "(adj.)", def: "富有的", eng: "Bill Gates is a wealthy international businessman.", chn: "比爾蓋茲是一個富有的跨國企業家。", group: "adv" }
-    ];
-
-    let currentList = [...rawVocabulary];
-    let currentIndex = 0;
-    let currentCategory = 'all';
-    let playbackSpeed = 1.0;
-    let starredList = JSON.parse(localStorage.getItem('cept4_v3_starred') || '[]');
-    let isFlipped = false;
-    let onlyShowStarred = false;
-
-    window.addEventListener('DOMContentLoaded', () => {
-        updateCounts();
-        applyAllFilters();
-    });
-
-    function updateCounts() {
-        document.getElementById('count-all').innerText = rawVocabulary.length;
-        document.getElementById('count-basic').innerText = rawVocabulary.filter(w => w.group === 'basic').length;
-        document.getElementById('count-medium').innerText = rawVocabulary.filter(w => w.group === 'medium').length;
-        document.getElementById('count-adv').innerText = rawVocabulary.filter(w => w.group === 'adv').length;
-        document.getElementById('star-counter').innerText = starredList.length;
-    }
-
-    function setCategory(cat) {
-        currentCategory = cat;
-        ['all', 'basic', 'medium', 'adv'].forEach(c => {
-            const btn = document.getElementById('tab-' + c);
-            if (c === cat) btn.classList.add('active');
-            else btn.classList.remove('active');
-        });
-        applyAllFilters();
-    }
-
-    function handleSearch() {
-        applyAllFilters();
-    }
-
-    function handleAlphaFilter() {
-        applyAllFilters();
-    }
-
-    function toggleStarredFilter() {
-        onlyShowStarred = !onlyShowStarred;
-        const btn = document.getElementById('star-filter-btn');
-        if (onlyShowStarred) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-        applyAllFilters();
-    }
-
-    function applyAllFilters() {
-        const query = document.getElementById('search-input').value.trim().toLowerCase();
-        const alpha = document.getElementById('alpha-select').value;
-
-        currentList = rawVocabulary.filter(item => {
-            const matchCategory = (currentCategory === 'all') || (item.group === currentCategory);
-            const matchAlpha = (alpha === 'all') || (item.word.toUpperCase().startsWith(alpha));
-            const matchStar = !onlyShowStarred || starredList.includes(item.id);
-            const matchQuery = !query || 
-                item.word.toLowerCase().includes(query) || 
-                item.def.includes(query) || 
-                item.chn.includes(query);
-
-            return matchCategory && matchAlpha && matchStar && matchQuery;
-        });
-
-        currentIndex = 0;
-        renderCard();
-    }
-
-    function renderCard() {
-        const card = document.getElementById('flashcard');
-        card.classList.remove('flipped');
-        isFlipped = false;
-
-        if (currentList.length === 0) {
-            document.getElementById('card-pos').innerText = '';
-            document.getElementById('card-word-text').innerText = '無符合單字';
-            document.getElementById('card-def').innerText = '請嘗試其他篩選條件';
-            document.getElementById('example-eng').innerText = '';
-            document.getElementById('example-chn').innerText = '';
-            document.getElementById('counter-pill').innerText = '0 / 0';
-            document.getElementById('word-id-pill').innerText = '--';
-            document.getElementById('card-star-btn').classList.remove('active');
-            return;
-        }
-
-        const item = currentList[currentIndex];
-        document.getElementById('card-pos').innerText = item.pos;
-        document.getElementById('card-word-text').innerText = item.word;
-        document.getElementById('card-def').innerText = item.def;
-        document.getElementById('example-eng').innerText = item.eng;
-        document.getElementById('example-chn').innerText = item.chn;
-
-        // Status tags
-        document.getElementById('counter-pill').innerText = `${currentIndex + 1} / ${currentList.length}`;
-        document.getElementById('word-id-pill').innerText = item.id;
-
-        const levelName = item.group === 'basic' ? '初級' : (item.group === 'medium' ? '中級' : '高級');
-        document.getElementById('level-pill').innerText = levelName;
-
-        // Star
-        const isStarred = starredList.includes(item.id);
-        const starBtn = document.getElementById('card-star-btn');
-        if (isStarred) starBtn.classList.add('active');
-        else starBtn.classList.remove('active');
-    }
-
-    function handleCardClick() {
-        flipCardOnly();
-    }
-
-    function flipCardOnly() {
-        if (currentList.length === 0) return;
-        const card = document.getElementById('flashcard');
-        isFlipped = !isFlipped;
-        if (isFlipped) {
-            card.classList.add('flipped');
-            if (document.getElementById('auto-speak-check').checked) {
-                speakText(currentList[currentIndex].eng);
-            }
-        } else {
-            card.classList.remove('flipped');
-        }
-    }
-
-    function nextCard() {
-        if (currentList.length === 0) return;
-        currentIndex = (currentIndex + 1) % currentList.length;
-        renderCard();
-    }
-
-    function prevCard() {
-        if (currentList.length === 0) return;
-        currentIndex = (currentIndex - 1 + currentList.length) % currentList.length;
-        renderCard();
-    }
-
-    function shuffleCards() {
-        for (let i = currentList.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [currentList[i], currentList[j]] = [currentList[j], currentList[i]];
-        }
-        currentIndex = 0;
-        renderCard();
-    }
-
-    function toggleCurrentStar() {
-        if (currentList.length === 0) return;
-        const currentItem = currentList[currentIndex];
-        const idx = starredList.indexOf(currentItem.id);
-        if (idx > -1) {
-            starredList.splice(idx, 1);
-        } else {
-            starredList.push(currentItem.id);
-        }
-        localStorage.setItem('cept4_v3_starred', JSON.stringify(starredList));
-        updateCounts();
-        renderCard();
-    }
-
-    function speakCurrent(e) {
-        if (e) e.stopPropagation();
-        if (currentList.length === 0) return;
-        speakText(currentList[currentIndex].word);
-    }
-
-    function speakText(text) {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = 'en-US';
-            u.rate = playbackSpeed;
-            window.speechSynthesis.speak(u);
-        }
-    }
-
-    function togglePlaybackSpeed() {
-        if (playbackSpeed === 1.0) playbackSpeed = 1.25;
-        else if (playbackSpeed === 1.25) playbackSpeed = 0.8;
-        else playbackSpeed = 1.0;
-
-        document.getElementById('speed-indicator').innerText = `⚡ ${playbackSpeed}x`;
-    }
-
-    /* Modal list */
-    function openOverviewModal() {
-        const modal = document.getElementById('overview-modal');
-        const list = document.getElementById('modal-list');
-        list.innerHTML = '';
-
-        rawVocabulary.forEach((item, idx) => {
-            const row = document.createElement('div');
-            row.className = 'list-item';
-            row.innerHTML = `
-                <span class="list-item-id">${item.id}</span>
-                <span class="list-item-word">${item.word}</span>
-                <span class="list-item-def">${item.pos} ${item.def}</span>
-            `;
-            row.onclick = () => {
-                currentCategory = 'all';
-                ['all', 'basic', 'medium', 'adv'].forEach(c => {
-                    document.getElementById('tab-' + c).classList.toggle('active', c === 'all');
-                });
-                document.getElementById('search-input').value = '';
-                document.getElementById('alpha-select').value = 'all';
-                onlyShowStarred = false;
-                document.getElementById('star-filter-btn').classList.remove('active');
-
-                currentList = [...rawVocabulary];
-                const foundIdx = currentList.findIndex(w => w.id === item.id);
-                currentIndex = foundIdx !== -1 ? foundIdx : 0;
-
-                renderCard();
-                closeOverviewModal();
-            };
-            list.appendChild(row);
-        });
-
-        modal.classList.add('open');
-    }
-
-    function closeOverviewModal(e) {
-        document.getElementById('overview-modal').classList.remove('open');
-    }
-
-    // Keyboard support
-    window.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextCard();
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevCard();
-        if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault();
-            flipCardOnly();
-        }
-    });
-</script>
-</body>
-</html>
